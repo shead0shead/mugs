@@ -270,6 +270,17 @@ namespace Mugs.Services
                 ["available"] = "available",
                 ["loaded"] = "loaded",
 
+                // Store command
+                ["store_description"] = "Search and install extensions from official store",
+                ["store_search_results"] = "Search results:",
+                ["store_installing"] = "Installing {0}...",
+                ["store_install_success"] = "Extension {0} installed successfully!",
+                ["store_list"] = "Available extensions:",
+                ["store_empty"] = "Store is empty",
+                ["store_extension_not_found"] = "Extension '{0}' not found",
+                ["store_install_usage"] = "Usage: store install <name>",
+                ["store_reload_reminder"] = "Run 'reload' to load new commands",
+
                 // Settings
                 ["verified_load_error"] = "Error loading verified hashes: {0}",
                 ["settings_error"] = "Error saving settings: {0}"
@@ -445,6 +456,17 @@ namespace Mugs.Services
                 ["extensions"] = "Расширения",
                 ["available"] = "доступно",
                 ["loaded"] = "загружено",
+
+                // Команда store
+                ["store_description"] = "Поиск и установка дополнений из официального хранилища",
+                ["store_search_results"] = "Результаты поиска:",
+                ["store_installing"] = "Установка {0}...",
+                ["store_install_success"] = "Дополнение {0} успешно установлено!",
+                ["store_list"] = "Доступные дополнения:",
+                ["store_empty"] = "Хранилище пусто",
+                ["store_extension_not_found"] = "Дополнение '{0}' не найдено",
+                ["store_install_usage"] = "Использование: store install <имя>",
+                ["store_reload_reminder"] = "Выполните 'reload' для загрузки новых команд",
 
                 // Настройки
                 ["verified_load_error"] = "Ошибка загрузки проверенных хешей: {0}",

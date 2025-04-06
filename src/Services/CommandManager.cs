@@ -54,6 +54,7 @@ namespace Mugs.Services
             RegisterCommand(new ScanCommand(_extensionsPath));
             RegisterCommand(new HistoryCommand());
             RegisterCommand(new VersionCommand(this));
+            RegisterCommand(new StoreCommand(this, _extensionsPath));
         }
 
         private async Task LoadExternalCommandsAsync()
