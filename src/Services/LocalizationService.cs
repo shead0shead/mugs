@@ -17,6 +17,7 @@ namespace Mugs.Services
         public static void Initialize()
         {
             Directory.CreateDirectory(LanguagesFolder);
+            CreateDefaultLanguageFiles();
             LoadAllLanguages();
 
             var savedLanguage = AppSettings.Language;
@@ -35,6 +36,34 @@ namespace Mugs.Services
             {
                 SetLanguage("en");
                 AppSettings.Language = "en";
+            }
+        }
+
+        private static void CreateDefaultLanguageFiles()
+        {
+            var enPath = Path.Combine(LanguagesFolder, "en.json");
+            var ruPath = Path.Combine(LanguagesFolder, "ru.json");
+
+            if (!File.Exists(enPath))
+            {
+                var enTranslations = CreateDefaultEnglishTranslations();
+                var enData = new LanguageData
+                {
+                    LanguageName = "English",
+                    Translations = enTranslations
+                };
+                File.WriteAllText(enPath, JsonConvert.SerializeObject(enData, Formatting.Indented));
+            }
+
+            if (!File.Exists(ruPath))
+            {
+                var ruTranslations = CreateDefaultRussianTranslations();
+                var ruData = new LanguageData
+                {
+                    LanguageName = "Русский",
+                    Translations = ruTranslations
+                };
+                File.WriteAllText(ruPath, JsonConvert.SerializeObject(ruData, Formatting.Indented));
             }
         }
 
@@ -244,6 +273,182 @@ namespace Mugs.Services
                 // Settings
                 ["verified_load_error"] = "Error loading verified hashes: {0}",
                 ["settings_error"] = "Error saving settings: {0}"
+            };
+        }
+
+        private static Dictionary<string, string> CreateDefaultRussianTranslations()
+        {
+            return new Dictionary<string, string>
+            {
+                // Общие
+                ["app_title"] = "Mugs",
+                ["welcome_message"] = "Консольное приложение с динамической загрузкой команд\nВведите 'help' для списка команд или 'exit' для выхода",
+                ["checking_updates"] = "Проверка обновлений...",
+                ["update_available"] = "Доступно обновление {0} (текущая версия {1})\nСкачать: {2}\nОписание: {3}\nДля установки введите: update install",
+                ["no_update_available"] = "У вас последняя версия {0}",
+                ["update_error"] = "Ошибка при проверке обновлений:\n{0}",
+                ["update_success"] = "Приложение успешно обновлено!",
+                ["command_not_found"] = "Команда '{0}' не найдена. Введите 'help' для списка команд",
+                ["command_error"] = "Ошибка выполнения команды: {0}",
+                ["exit_confirmation"] = "Вы уверены, что хотите выйти? (y/n)",
+                ["invalid_input"] = "Неверный ввод",
+
+                // Команда help
+                ["builtin_commands"] = "Встроенные команды:",
+                ["verified_commands"] = "Проверенные команды (✅ безопасные):",
+                ["external_commands"] = "Сторонние команды (используйте с осторожностью):",
+                ["command_help"] = "Для подробной справки введите: help <команда>",
+                ["help_command"] = "help",
+                ["help_description"] = "Показывает справку по командам",
+                ["help_usage"] = "help update, help new",
+
+                // Команда language
+                ["language_description"] = "Устанавливает или показывает текущий язык",
+                ["current_language"] = "Текущий язык: {0}",
+                ["available_languages"] = "Доступные языки: {0}",
+                ["language_changed"] = "Язык изменен на {0}",
+                ["invalid_language"] = "Неверный код языка: {0}",
+                ["language_usage"] = "language en\nlanguage ru",
+
+                // Команда list
+                ["list_description"] = "Показывает все доступные команды и их статус",
+                ["available_commands"] = "Доступные команды:",
+                ["disabled_extensions"] = "Отключенные расширения:",
+                ["example"] = "Пример использования",
+                ["enable_usage"] = "Для включения используйте: enable <имя_команды>",
+                ["verified"] = "Проверено",
+
+                // Команда reload
+                ["reload_description"] = "Перезагружает все команды из файлов",
+                ["reloading_commands"] = "Перезагрузка команд...",
+                ["commands_reloaded"] = "Команды успешно перезагружены",
+
+                // Команда clear
+                ["clear_description"] = "Очищает консоль",
+
+                // Команда restart
+                ["restart_description"] = "Полностью перезапускает приложение",
+                ["restarting"] = "Перезапуск приложения...",
+
+                // Команда time
+                ["time_description"] = "Показывает текущее время",
+                ["current_time"] = "Текущее время: {0}",
+
+                // Команда update
+                ["update_description"] = "Проверяет и устанавливает обновления приложения",
+                ["confirm_update"] = "Вы уверены, что хотите установить обновление? (y/n)",
+                ["update_cancelled"] = "Обновление отменено",
+                ["starting_update"] = "Начало процесса обновления...",
+                ["downloading_update"] = "Загрузка обновления...",
+                ["extracting_update"] = "Распаковка обновления...",
+                ["creating_backup"] = "Создание резервной копии...",
+                ["installing_update"] = "Установка обновления...",
+                ["finishing_update"] = "Завершение установки...",
+                ["update_failed"] = "Ошибка установки обновления: {0}",
+
+                // Команда new
+                ["new_description"] = "Создает шаблон скрипта дополнения в папке Extensions",
+                ["missing_command_name"] = "Укажите имя команды (например: new mycommand)",
+                ["file_exists"] = "Файл {0} уже существует!",
+                ["template_created"] = "Шаблон команды создан: {0}",
+                ["reload_usage"] = "Для использования выполните: reload",
+
+                // Команды enable/disable
+                ["enable_description"] = "Включает отключенное расширение",
+                ["disable_description"] = "Отключает расширение",
+                ["missing_extension_name"] = "Укажите имя команды или файла расширения для включения (например: enable mycommand или enable myextension.csx.disable)",
+                ["extension_not_found"] = "Файл '{0}' не найден",
+                ["multiple_extensions"] = "Найдено несколько отключенных расширений для команды '{0}':",
+                ["specify_filename"] = "Укажите имя файла для включения",
+                ["no_disabled_extensions"] = "Не найдено отключенных расширений для команды/файла '{0}'",
+                ["extension_enabled"] = "Расширение '{0}' включено",
+                ["extension_disabled"] = "Расширение '{0}' отключено",
+                ["command_not_found_disable"] = "Команда/файл '{0}' не найдена",
+
+                // Команда import
+                ["import_description"] = "Загружает и устанавливает расширение из указанного URL",
+                ["missing_url"] = "Укажите URL расширения для загрузки (например: import https://example.com/extension.csx)",
+                ["downloading_extension"] = "Загрузка расширения из URL: {0}",
+                ["extension_downloaded"] = "Расширение успешно загружено: {0}",
+                ["download_error"] = "Ошибка загрузки расширения: {0}",
+
+                // Команда debug
+                ["debug_description"] = "Запускает команду в режиме отладки",
+                ["missing_debug_command"] = "Укажите команду для отладки (например: debug mycommand --args \"test\")",
+                ["debug_start"] = "Запуск {0} с аргументами: {1}",
+                ["debug_vars"] = "Переменные: args = {0}",
+                ["debug_completed"] = "Команда выполнена за {0} мс",
+                ["debug_error"] = "Ошибка выполнения: {0}: {1}",
+
+                // Детали команды
+                ["command"] = "Команда",
+                ["description"] = "Описание",
+                ["aliases"] = "Псевдонимы",
+                ["author"] = "Автор",
+                ["version"] = "Версия",
+                ["usage_examples"] = "Примеры использования",
+                ["verification"] = "Проверка",
+                ["verified_safe"] = "Эта команда проверена и безопасна",
+
+                // Команда script
+                ["script_description"] = "Выполняет команды из текстового файла",
+                ["missing_script_file"] = "Укажите файл скрипта для выполнения (например: script commands.txt)",
+                ["script_file_not_found"] = "Файл скрипта '{0}' не найден",
+                ["executing_command"] = "Выполнение: {0}",
+                ["command_output"] = "Вывод команды: {0}",
+                ["script_completed"] = "Выполнение скрипта завершено",
+                ["script_error"] = "Ошибка выполнения скрипта: {0}",
+
+                // Переключение подсказок
+                ["toggle_suggestions"] = "Переключает отображение подсказок команд",
+                ["suggestions_enabled"] = "Подсказки команд включены",
+                ["suggestions_disabled"] = "Подсказки команд отключены",
+
+                // Кэш метаданных команд
+                ["cache_save_error"] = "Ошибка сохранения кэша метаданных: {0}",
+                ["command_requires_recompile"] = "Команда '{0}' требует перекомпиляции. Используйте команду 'reload'",
+                ["cache_cleared"] = "Кэш метаданных очищен",
+
+                // Команда alias
+                ["alias_description"] = "Управление псевдонимами команд",
+                ["alias_usage"] = "alias add <команда> <псевдоним>, alias remove <псевдоним>, alias list",
+                ["alias_no_aliases"] = "Пользовательские псевдонимы не определены",
+                ["alias_header"] = "Пользовательские псевдонимы:",
+                ["alias_added"] = "Псевдоним '{0}' добавлен для команды '{1}'",
+                ["alias_removed"] = "Псевдоним '{0}' удален",
+                ["alias_not_found"] = "Псевдоним не найден",
+                ["alias_invalid_syntax"] = "Неверный синтаксис команды alias",
+
+                // Команда scan
+                ["scan_description"] = "Проверяет скрипт на потенциально опасный код",
+                ["scan_missing_file"] = "Укажите файл скрипта для проверки (например: scan mycommand.csx)",
+                ["scan_file_not_found"] = "Файл '{0}' не найден",
+                ["scan_issues_found"] = "Найдены потенциальные проблемы безопасности в {0}:",
+                ["scan_no_issues"] = "Опасных шаблонов кода не найдено в {0}",
+                ["scan_total_issues"] = "Всего найдено проблем: {0}",
+                ["scan_error"] = "Ошибка проверки: {0}",
+                ["full_path_display"] = "Полный путь: {0}",
+
+                // Команда history
+                ["history_description"] = "Показывает историю команд или выполняет поиск по ней",
+                ["history_showing"] = "Показаны последние {0} команд:",
+                ["history_search_results"] = "Результаты поиска для \"{0}\":",
+                ["history_no_results"] = "Команды, соответствующие \"{0}\", не найдены",
+                ["history_invalid_count"] = "Указано неверное количество. Используется значение по умолчанию.",
+                ["history_full"] = "Полная история команд:",
+
+                // Команда version
+                ["version_description"] = "Показывает версию приложения и информацию",
+                ["application"] = "Приложение",
+                ["repo"] = "Репозиторий",
+                ["commands"] = "Команды",
+                ["extensions"] = "Расширения",
+                ["available"] = "доступно",
+                ["loaded"] = "загружено",
+
+                // Настройки
+                ["verified_load_error"] = "Ошибка загрузки проверенных хешей: {0}",
+                ["settings_error"] = "Ошибка сохранения настроек: {0}"
             };
         }
 
