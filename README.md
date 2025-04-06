@@ -1,60 +1,60 @@
-# Mugs - Расширяемая консольная утилита
+# Mugs - Extensible Console Utility
 
-Mugs - это мощная консольная утилита с поддержкой динамической загрузки команд через скрипты C#. Программа предоставляет удобную среду для выполнения встроенных и пользовательских команд с поддержкой локализации, автоматических обновлений и системы безопасности.
+Mugs is a powerful console utility with support for dynamic command loading through C# scripts. The program provides a convenient environment for executing built-in and custom commands with features like localization, automatic updates, and a security system.
 
-## Основные возможности
+## Key Features
 
-* **Динамическая загрузка команд** из файлов `.csx` и `.cs`
-* **Встроенные команды** для управления системой
-* **Поддержка локализации** с возможностью добавления новых языков
-* **Автоматические обновления** через GitHub Release
-* **Система безопасности** с проверкой скриптов на опасный код
-* **Подсказки команд** с автодополнением
-* **История команд** с возможностью поиска
-* **Псевдонимы команд** для быстрого доступа
-* **Пакетное выполнение** команд из файлов
-* **Отладка команд** с выводом времени выполнения
-* **Кэширование метаданных** для быстрой загрузки команд
-* **Верифицированные расширения** с проверкой хэшей
+* **Dynamic command loading** from `.csx` and `.cs` files  
+* **Built-in commands** for system management  
+* **Localization support** with the ability to add new languages  
+* **Automatic updates** via GitHub Release  
+* **Security system** with script checks for dangerous code  
+* **Command hints** with auto-completion  
+* **Command history** with search functionality  
+* **Command aliases** for quick access  
+* **Batch execution** of commands from files  
+* **Command debugging** with execution time output  
+* **Metadata caching** for fast command loading  
+* **Verified extensions** with hash verification  
 
-## Установка
+## Installation
 
-1. Скачайте последнюю версию из [раздела Releases](https://github.com/shead0shead/mugs-test/releases)
-2. Распакуйте архив в удобную директорию
-3. Запустите `Mugs.exe`
+1. Download the latest version from the [Releases section](https://github.com/shead0shead/mugs-test/releases)  
+2. Extract the archive to a convenient directory  
+3. Run `Mugs.exe`  
 
-## Использование
+## Usage
 
-После запуска вы увидите приветственное сообщение. Введите `help` для просмотра списка доступных команд.
+After launching, you will see a welcome message. Type `help` to view the list of available commands.  
 
-## Основные команды
+## Basic Commands
 
-* `help` - Показать справку по командам
-* `list` - Список всех доступных команд
-* `reload` - Перезагрузить все команды
-* `clear` - Очистить консоль
-* `restart` - Полностью перезапустить приложение
-* `time` - Показать текущее время
-* `update` - Проверить и установить обновления
-* `new <имя>` - Создать шаблон новой команды
-* `enable/disable <команда>` - Включить/выключить расширение
-* `import <url>` - Установить расширение из URL
-* `language <код>` - Изменить язык интерфейса
-* `script <файл>` - Выполнить команды из файла
-* `suggestions` - Включить/выключить подсказки команд
-* `alias` - Управление псевдонимами команд
-* `scan <файл>` - Проверить скрипт на опасный код
-* `history` - Показать историю команд
-* `version` - Показать версию приложения
-* `debug <команда>` - Запустить команду в режиме отладки
+* `help` - Show command help  
+* `list` - List all available commands  
+* `reload` - Reload all commands  
+* `clear` - Clear the console  
+* `restart` - Fully restart the application  
+* `time` - Show the current time  
+* `update` - Check for and install updates  
+* `new <name>` - Create a template for a new command  
+* `enable/disable <command>` - Enable/disable an extension  
+* `import <url>` - Install an extension from a URL  
+* `language <code>` - Change the interface language  
+* `script <file>` - Execute commands from a file  
+* `suggestions` - Enable/disable command hints  
+* `alias` - Manage command aliases  
+* `scan <file>` - Check a script for dangerous code  
+* `history` - Show command history  
+* `version` - Show the application version  
+* `debug <command>` - Run a command in debug mode  
 
-## Создание собственных команд
+## Creating Custom Commands
 
-1. Используйте команду `new mycommand` для создания шаблона
-2. Отредактируйте файл `Extensions/mycommand.csx`
-3. Выполните `reload` для загрузки изменений
+1. Use the command `new mycommand` to create a template  
+2. Edit the file `Extensions/mycommand.csx`  
+3. Run `reload` to apply the changes  
 
-Пример простой команды:
+Example of a simple command:  
 
 ```csharp
 public class MyCommand : ICommand
@@ -76,34 +76,34 @@ public class MyCommand : ICommand
 new MyCommand()
 ```
 
-## Безопасность
+## Security
 
-Программа включает систему проверки скриптов:
+The program includes a script verification system:
 
-* Автоматическая проверка на опасные вызовы (scan команда)
-* Система верифицированных расширений (помечаются значком ✅)
-* Возможность отключения подозрительных скриптов
-* Проверка хэшей файлов для верифицированных команд
+* Automatic checks for dangerous calls (scan command)
+* Verified extensions system (marked with a ✅ icon)
+* Ability to disable suspicious scripts
+* File hash verification for verified commands
 
-## Локализация
+## Localization
 
-Поддерживается несколько языков. Текущий язык можно изменить командой language. Доступные языки:
+Multiple languages are supported. The current language can be changed using the `language` command. Available languages:
 
-* en (English) - по умолчанию
+* en (English) - default
 * ru (Русский)
 
-Для добавления нового языка создайте файл `Languages/<код>.json` на основе английской локализации.
+To add a new language, create a file `Languages/<code>.json` based on the English localization.
 
-## Лицензия
+## License
 
-Проект распространяется под лицензией MIT. Подробности см. в файле LICENSE.
+The project is distributed under the MIT license. For details, see the LICENSE file.
 
-## Поддержка и вклад в проект
+## Support and Contributions
 
-Сообщения об ошибках и запросы функций можно оставлять в Issues. Pull requests приветствуются!
+Bug reports and feature requests can be submitted in Issues. Pull requests are welcome!
 
-## Системные требования
+## System Requirements
 
-* .NET 6.0 или выше
-* Windows 7/10/11 или Linux/macOS (с Mono)
-* 50 МБ свободного места на диске
+* .NET 6.0 or higher
+* Windows 7/10/11 or Linux/macOS (with Mono)
+* 50 MB of free disk space
