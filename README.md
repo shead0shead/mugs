@@ -19,7 +19,7 @@ Mugs is a powerful console utility with support for dynamic command loading thro
 
 ## Installation
 
-1. Download the latest version from the [Releases section](https://github.com/shead0shead/mugs-test/releases)  
+1. Download the latest version from the [Releases section](https://github.com/shead0shead/mugs/releases)  
 2. Extract the archive to a convenient directory  
 3. Run `Mugs.exe`  
 
