@@ -2,7 +2,6 @@
 
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.IO.Compression;
 using System.Net;
 
 namespace Mugs.Services
@@ -18,6 +17,7 @@ namespace Mugs.Services
         static UpdateCheckerService()
         {
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "ConsoleAppUpdater");
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
         }
 
         public static async Task CheckForUpdatesAsync(bool notifyIfNoUpdate = false)
@@ -55,43 +55,45 @@ namespace Mugs.Services
 
                 var response = await _httpClient.GetStringAsync(GitHubReleasesUrl);
                 dynamic release = JsonConvert.DeserializeObject(response);
-                string downloadUrl = release.assets[0].browser_download_url;
                 string version = release.tag_name;
 
-                string tempDir = Path.Combine(Path.GetTempPath(), "ConsoleAppUpdate");
+                string downloadUrl = null;
+                foreach (var asset in release.assets)
+                {
+                    if (asset.name.ToString().Equals("Mugs.exe", StringComparison.OrdinalIgnoreCase))
+                    {
+                        downloadUrl = asset.browser_download_url.ToString();
+                        break;
+                    }
+                }
+
+                if (downloadUrl == null)
+                {
+                    throw new Exception("Mugs.exe not found in release assets");
+                }
+
+                string tempDir = Path.Combine(Path.GetTempPath(), "MugsUpdate");
                 if (Directory.Exists(tempDir))
                     Directory.Delete(tempDir, true);
                 Directory.CreateDirectory(tempDir);
 
                 ConsoleHelperService.WriteResponse("downloading_update");
-                string zipPath = Path.Combine(tempDir, "update.zip");
+                string exePath = Path.Combine(tempDir, "Mugs.exe");
                 using (var client = new WebClient())
                 {
-                    await client.DownloadFileTaskAsync(new Uri(downloadUrl), zipPath);
+                    await client.DownloadFileTaskAsync(new Uri(downloadUrl), exePath);
                 }
-
-                ConsoleHelperService.WriteResponse("extracting_update");
-                ZipFile.ExtractToDirectory(zipPath, tempDir);
 
                 string currentExePath = Process.GetCurrentProcess().MainModule.FileName;
                 string currentDir = Path.GetDirectoryName(currentExePath);
-                string backupDir = Path.Combine(currentDir, "Backup_" + DateTime.Now.ToString("yyyyMMddHHmmss"));
+                string backupPath = Path.Combine(currentDir, $"Mugs_backup_{DateTime.Now:yyyyMMddHHmmss}.exe");
 
                 ConsoleHelperService.WriteResponse("creating_backup");
-                Directory.CreateDirectory(backupDir);
-                foreach (var file in Directory.GetFiles(currentDir, "*.*", SearchOption.TopDirectoryOnly))
-                {
-                    if (!file.EndsWith(".dll") && !file.EndsWith(".exe")) continue;
-                    File.Copy(file, Path.Combine(backupDir, Path.GetFileName(file)));
-                }
+                File.Copy(currentExePath, backupPath, true);
 
                 ConsoleHelperService.WriteResponse("installing_update");
-                foreach (var file in Directory.GetFiles(tempDir, "*.*", SearchOption.TopDirectoryOnly))
-                {
-                    string destPath = Path.Combine(currentDir, Path.GetFileName(file));
-                    if (File.Exists(destPath)) File.Delete(destPath);
-                    File.Move(file, destPath);
-                }
+                File.Delete(currentExePath);
+                File.Move(exePath, currentExePath);
 
                 ConsoleHelperService.WriteResponse("finishing_update");
                 Process.Start(new ProcessStartInfo
