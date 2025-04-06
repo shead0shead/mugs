@@ -6,7 +6,7 @@ namespace Mugs.Services
 {
     public class VerifiedExtensionsService
     {
-        private const string VerifiedHashesUrl = "https://raw.githubusercontent.com/shead0shead/mugs-test/main/verified_hashes.json";
+        private const string VerifiedHashesUrl = "https://raw.githubusercontent.com/shead0shead/mugs/main/verified_hashes.json";
         private static readonly HttpClient _httpClient = new HttpClient();
         private static Dictionary<string, string> _verifiedHashes = new Dictionary<string, string>();
         private static bool _hashesLoaded = false;
