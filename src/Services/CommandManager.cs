@@ -134,33 +134,42 @@ namespace Mugs.Services
         {
             try
             {
-                var assemblies = new[]
+                var defaultUsings = new[]
                 {
-                typeof(object).Assembly,
-                typeof(Enumerable).Assembly,
-                typeof(System.ComponentModel.Component).Assembly,
-                typeof(System.Diagnostics.Process).Assembly,
-                typeof(System.Dynamic.DynamicObject).Assembly,
-                typeof(System.IO.File).Assembly,
-                typeof(System.Net.WebClient).Assembly,
-                typeof(System.Text.RegularExpressions.Regex).Assembly,
-                typeof(System.Xml.XmlDocument).Assembly,
-                Assembly.GetExecutingAssembly()
-            };
+                    "Mugs.Interfaces",
+                    "Mugs.Models",
+                    "Mugs.Services",
+                    "System",
+                    "System.IO",
+                    "System.Linq",
+                    "System.Collections",
+                    "System.Collections.Generic",
+                    "System.Threading",
+                    "System.Threading.Tasks",
+                    "System.Text",
+                    "System.Text.RegularExpressions",
+                    "System.Net",
+                    "System.Net.Http",
+                    "System.Dynamic",
+                    "System.Xml",
+                    "System.Xml.Linq"
+                };
 
-                var imports = new[]
+                var defaultAssemblies = new[]
                 {
-                "System", "System.IO", "System.Linq", "System.Collections",
-                "System.Collections.Generic", "System.Diagnostics", "System.Threading",
-                "System.Threading.Tasks", "System.Text", "System.Text.RegularExpressions",
-                "System.Net", "System.Net.Http", "System.Dynamic", "System.Xml", "System.Xml.Linq"
-            };
+                    typeof(object).Assembly,
+                    typeof(Enumerable).Assembly,
+                    typeof(System.ComponentModel.Component).Assembly,
+                    typeof(System.Diagnostics.Process).Assembly,
+                    typeof(System.Dynamic.DynamicObject).Assembly,
+                    typeof(System.IO.File).Assembly,
+                    typeof(System.Net.WebClient).Assembly,
+                    typeof(System.Text.RegularExpressions.Regex).Assembly,
+                    typeof(System.Xml.XmlDocument).Assembly,
+                    Assembly.GetExecutingAssembly()
+                };
 
-                var scriptOptions = ScriptOptions.Default
-                    .WithReferences(assemblies)
-                    .WithImports(imports);
-
-                var globalsType = typeof(CommandGlobals);
+                var processedCode = ProcessScriptCode(code, filePath, defaultUsings);
 
                 if (ScriptCacheService.TryGetScript(filePath, out var cachedScript))
                 {
@@ -177,9 +186,12 @@ namespace Mugs.Services
                     }
                 }
 
-                var processedCode = ProcessLoadDirectives(code, filePath);
+                var scriptOptions = ScriptOptions.Default
+                    .WithReferences(defaultAssemblies)
+                    .WithImports(defaultUsings);
 
-                var script = CSharpScript.Create(processedCode, scriptOptions, globalsType);
+                var script = CSharpScript.Create(processedCode, scriptOptions, typeof(CommandGlobals));
+
                 var compilation = script.GetCompilation();
                 var diagnostics = compilation.GetDiagnostics()
                     .Where(d => d.Severity == DiagnosticSeverity.Error)
@@ -194,21 +206,85 @@ namespace Mugs.Services
                 ScriptCacheService.AddScript(filePath, script);
 
                 var result = await script.RunAsync(new CommandGlobals(_extensionsPath) { Manager = this });
-                if (result.Exception != null) throw result.Exception;
+
+                if (result.Exception != null)
+                {
+                    throw result.Exception;
+                }
 
                 var command = result.ReturnValue as ICommand;
                 return command != null ? new[] { command } : Enumerable.Empty<ICommand>();
             }
             catch (CompilationErrorException ex)
             {
-                ConsoleHelperService.WriteError("Script compilation error: {0}", string.Join(Environment.NewLine, ex.Diagnostics));
+                ConsoleHelperService.WriteError($"Script compilation error: {string.Join(Environment.NewLine, ex.Diagnostics)}");
                 return Enumerable.Empty<ICommand>();
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("Script execution error: {0}", ex.Message);
+                ConsoleHelperService.WriteError($"Script execution error in '{Path.GetFileName(filePath)}': {ex.Message}");
                 return Enumerable.Empty<ICommand>();
             }
+        }
+
+        private string ProcessScriptCode(string code, string filePath, string[] defaultUsings)
+        {
+            var lines = code.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            var result = new StringBuilder();
+            var loadedScripts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var existingUsings = new HashSet<string>();
+
+            foreach (var line in lines)
+            {
+                if (line.TrimStart().StartsWith("using ") && line.Contains(";"))
+                {
+                    var usingDirective = line.Trim();
+                    existingUsings.Add(usingDirective.Substring(6, usingDirective.Length - 7).Trim());
+                }
+            }
+
+            foreach (var usingNamespace in defaultUsings)
+            {
+                if (!existingUsings.Contains(usingNamespace))
+                {
+                    result.AppendLine($"using {usingNamespace};");
+                }
+            }
+
+            if (defaultUsings.Length > existingUsings.Count)
+            {
+                result.AppendLine();
+            }
+
+            foreach (var line in lines)
+            {
+                if (line.TrimStart().StartsWith("#load ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var scriptName = line.Substring(line.IndexOf('"') + 1);
+                    scriptName = scriptName.Substring(0, scriptName.IndexOf('"'));
+
+                    if (!loadedScripts.Contains(scriptName))
+                    {
+                        var scriptPath = Path.Combine(Path.GetDirectoryName(filePath), scriptName);
+                        if (File.Exists(scriptPath))
+                        {
+                            var scriptCode = File.ReadAllText(scriptPath);
+                            result.AppendLine(ProcessScriptCode(scriptCode, scriptPath, defaultUsings));
+                            loadedScripts.Add(scriptName);
+                        }
+                        else
+                        {
+                            throw new FileNotFoundException($"Script file not found: {scriptName}");
+                        }
+                    }
+                }
+                else if (!line.TrimStart().StartsWith("using ") || !defaultUsings.Contains(line.Trim().Substring(6, line.Trim().Length - 7).Trim()))
+                {
+                    result.AppendLine(line);
+                }
+            }
+
+            return result.ToString();
         }
 
         private string ProcessLoadDirectives(string code, string currentFilePath)
@@ -216,6 +292,49 @@ namespace Mugs.Services
             var lines = code.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             var result = new StringBuilder();
             var loadedScripts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            var defaultUsings = new[]
+            {
+                "using Mugs.Interfaces",
+                "using Mugs.Models",
+                "using Mugs.Services",
+                "using System;",
+                "using System.IO;",
+                "using System.Linq;",
+                "using System.Collections;",
+                "using System.Collections.Generic;",
+                "using System.Threading;",
+                "using System.Threading.Tasks;",
+                "using System.Text;",
+                "using System.Text.RegularExpressions;",
+                "using System.Net;",
+                "using System.Net.Http;",
+                "using System.Dynamic;",
+                "using System.Xml;",
+                "using System.Xml.Linq;"
+            };
+
+            var existingUsings = new HashSet<string>();
+            foreach (var line in lines)
+            {
+                if (line.TrimStart().StartsWith("using ") && line.Contains(";"))
+                {
+                    existingUsings.Add(line.Trim());
+                }
+            }
+
+            foreach (var usingLine in defaultUsings)
+            {
+                if (!existingUsings.Contains(usingLine))
+                {
+                    result.AppendLine(usingLine);
+                }
+            }
+
+            if (defaultUsings.Length > existingUsings.Count)
+            {
+                result.AppendLine();
+            }
 
             foreach (var line in lines)
             {
@@ -239,7 +358,7 @@ namespace Mugs.Services
                         }
                     }
                 }
-                else
+                else if (!line.TrimStart().StartsWith("using ") || !defaultUsings.Contains(line.Trim()))
                 {
                     result.AppendLine(line);
                 }
@@ -253,11 +372,11 @@ namespace Mugs.Services
             var syntaxTree = CSharpSyntaxTree.ParseText(code);
             var references = new[]
             {
-        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Task).Assembly.Location),
-        MetadataReference.CreateFromFile(Assembly.GetExecutingAssembly().Location)
-    };
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Task).Assembly.Location),
+                MetadataReference.CreateFromFile(Assembly.GetExecutingAssembly().Location)
+            };
 
             var compilation = CSharpCompilation.Create(
                 "DynamicCommands",
