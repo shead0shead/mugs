@@ -12,9 +12,10 @@ public class Program
         MetadataCacheService.Initialize();
         AliasManagerService.Initialize();
         AppSettings.Initialize();
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
         ConsoleHelperService.Initialize();
         LocalizationService.Initialize();
+
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
         Console.Title = LocalizationService.GetString("app_title");
 
         if (args.All(a => a != "--updated"))
