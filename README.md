@@ -70,9 +70,8 @@ public class MyCommand : ICommand
 
     public async Task ExecuteAsync(string[] args)
     {
-        // Access global utilities
-        Print($"Command executed with args: {string.Join(", ", args)}");
-        DebugLog("Debug information");
+        // Output command arguments to console
+        ConsoleHelperService.WriteResponse($"Command executed with args: {string.Join(", ", args)}");
         
         // Use shared data between commands
         SetSharedData("mykey", "value");
@@ -249,7 +248,6 @@ Example structure:
 ```
 Mugs/
 ├── Commands/          # Built-in command implementations
-├── Languages/         # Localization files
 ├── Models/            # Data structures
 ├── Services/          # Core functionality
 └── Interfaces/        # Public interfaces
