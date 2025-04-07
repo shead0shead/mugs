@@ -1,4 +1,4 @@
-﻿// Mugs/Services/MetadataCasheService.cs
+﻿// Mugs/Services/MetadataCacheService.cs
 
 using Mugs.Models;
 
