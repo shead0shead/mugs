@@ -87,48 +87,31 @@ new MyCommand()
 
 Mugs allows you to create reusable libraries that can be shared between different commands. Here's how to create and use a library:
 
-#### 1. Creating a Library (mouse_utils.csx)
+#### 1. Creating a Library (math_utils.csx)
 
 ```csharp
-// mouse_utils.csx - Mouse control library using Windows API
+// math_utils.csx - Simple math operations library
 
-using System;
-using System.Runtime.InteropServices;
-using System.Threading;
-
-public class MouseUtils
+public class MathUtils
 {
-    // Windows API imports
-    [DllImport("user32.dll")]
-    private static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
+    // Add two numbers
+    public static double Add(double a, double b) => a + b;
 
-    [DllImport("user32.dll")]
-    private static extern bool SetCursorPos(int x, int y);
+    // Subtract two numbers
+    public static double Subtract(double a, double b) => a - b;
 
-    // Constants for mouse events
-    private const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
-    private const uint MOUSEEVENTF_LEFTUP = 0x0004;
+    // Multiply two numbers
+    public static double Multiply(double a, double b) => a * b;
 
-    // Move cursor to specified coordinates
-    public static void Move(int x, int y) 
+    // Divide two numbers
+    public static double Divide(double a, double b)
     {
-        SetCursorPos(x, y);
+        if (b == 0) throw new DivideByZeroException();
+        return a / b;
     }
 
-    // Perform mouse click
-    public static void Click(string button = "left")
-    {
-        uint downFlag = button.ToLower() switch
-        {
-            "left" => MOUSEEVENTF_LEFTDOWN,
-            "right" => MOUSEEVENTF_RIGHTDOWN,
-            _ => throw new ArgumentException("Unknown button")
-        };
-        
-        mouse_event(downFlag | (downFlag << 1), 0, 0, 0, UIntPtr.Zero);
-    }
-
-    // More utility methods...
+    // Calculate percentage
+    public static double Percentage(double value, double percent) => value * percent / 100;
 }
 ```
 Key points about libraries:
@@ -139,69 +122,71 @@ Key points about libraries:
 * Use `public` visibility for shared methods
 * Can use platform interop (like Windows API)
 
-#### 2. Using the Library (mouse_utils_usage_example.csx)
+#### 2. Using the Library (math_command.csx)
 
 ```csharp
-// mouse_utils_usage_example.csx - Example command using mouse_utils library
+// math_command.csx - Example command using math_utils library
 
-#load "mouse_utils.csx"  // Load the library
+#load "math_utils.csx"  // Load the library
 
-public class MouseCommand : ICommand
+public class MathCommand : ICommand
 {
-    public string Name => "mouse";
-    public string Description => "Mouse control commands";
-    public IEnumerable<string> Aliases => new[] { "m" };
+    // Command metadata
+    public string Name => "math";
+    public string Description => "Basic math operations";
+    public IEnumerable<string> Aliases => new[] { "m" }; // Short alias
     public string Author => "Your Name";
     public string Version => "1.0";
 
     public async Task ExecuteAsync(string[] args)
     {
-        if (args.Length == 0)
+        // Validate argument count
+        if (args.Length != 3)
         {
-            ConsoleHelperService.WriteResponse(
-                "Usage:\n" +
-                "mouse move [x] [y] - Move cursor\n" +
-                "mouse click [left|right] - Click"
-            );
+            ConsoleHelperService.WriteResponse("Usage: math [add|sub|mul|div] x y");
             return;
         }
 
         try
         {
-            switch (args[0])
+            // Parse input numbers
+            double x = double.Parse(args[1]);
+            double y = double.Parse(args[2]);
+            
+            // Calculate result using switch expression
+            double result = args[0] switch
             {
-                case "move":
-                    MouseUtils.Move(int.Parse(args[1]), int.Parse(args[2]));
-                    break;
-                    
-                case "click":
-                    MouseUtils.Click(args.Length > 1 ? args[1] : "left");
-                    break;
-                    
-                default:
-                    ConsoleHelperService.WriteError("Unknown command");
-                    break;
-            }
+                "add" => MathUtils.Add(x, y),
+                "sub" => MathUtils.Subtract(x, y),
+                "mul" => MathUtils.Multiply(x, y),
+                "div" => MathUtils.Divide(x, y),
+                _ => throw new ArgumentException("Invalid operation")
+            };
+            
+            // Output formatted result
+            ConsoleHelperService.WriteResponse($"Result: {result}");
         }
         catch (Exception ex)
         {
-            ConsoleHelperService.WriteError($"Error: {ex.Message}");
+            // Handle parsing and calculation errors
+            ConsoleHelperService.WriteError(ex.Message);
         }
     }
 }
 
-// Required for script commands
-new MouseCommand()
+// Required instantiation for script commands
+new MathCommand()
 ```
 #### 3. Development Workflow
 
-1. Create your library file (e.g., mouse_utils.csx)
+1. Create your library file (e.g., math_utils.csx)
 2. Create command files that use the library with #load directive
 3. Test your commands:
 
     ```
-    reload              # Reload all commands
-    mouse move 100 100  # Test your command
+    reload               # Reload all commands
+    math add 5 3         # Should output "Result: 8"
+    math div 10 2        # Should output "Result: 5"
     ```
 
 ## Security
