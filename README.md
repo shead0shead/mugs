@@ -2,6 +2,8 @@
 
 Mugs is a powerful console utility with support for dynamic command loading through C# scripts. The program provides a convenient environment for executing built-in and custom commands with features like localization, automatic updates, and a security system.
 
+![Screenshot](./assets/screenshot.png)
+
 ## Key Features
 
 * **Dynamic command loading** from `.csx` and `.cs` files  
