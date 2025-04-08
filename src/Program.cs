@@ -25,7 +25,10 @@ public class Program
             if (args.All(a => a != "--updated"))
             {
                 OutputService.WriteResponse("checking_updates");
-                await UpdateCheckerService.CheckForUpdatesAsync();
+                using (SpinnerService.StartActivity())
+                {
+                    await UpdateCheckerService.CheckForUpdatesAsync();
+                }
             }
             else
             {
@@ -33,7 +36,10 @@ public class Program
             }
 
             var manager = new CommandManager(ExtensionsFolder);
-            manager.LoadCommandsAsync().Wait();
+            using (SpinnerService.StartActivity())
+            {
+                manager.LoadCommandsAsync().Wait();
+            }
 
             LoggerService.LogInfo("Application started successfully");
             OutputService.WriteResponse("welcome_message");
@@ -47,9 +53,12 @@ public class Program
                 if (input.Equals("exit", StringComparison.OrdinalIgnoreCase))
                 {
                     OutputService.WriteResponse("exit_confirmation");
-                    var confirm = Console.ReadLine();
-                    if (confirm.Equals("y", StringComparison.OrdinalIgnoreCase))
-                        break;
+                    using (SpinnerService.PauseForInput())
+                    {
+                        var confirm = Console.ReadLine();
+                        if (confirm.Equals("y", StringComparison.OrdinalIgnoreCase))
+                            break;
+                    }
                     continue;
                 }
 
@@ -66,7 +75,10 @@ public class Program
 
                 try
                 {
-                    await command.ExecuteAsync(commandArgs);
+                    using (SpinnerService.StartActivity())
+                    {
+                        await command.ExecuteAsync(commandArgs);
+                    }
                 }
                 catch (Exception ex)
                 {
