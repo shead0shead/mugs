@@ -42,6 +42,7 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `enable/disable <command>` - Enable/disable an extension  
 * `import <url>` - Install an extension from a URL  
 * `language <code>` - Change the interface language  
+* `logging` - Enable/disable console logging output  
 * `script <file>` - Execute commands from a file  
 * `suggestions` - Enable/disable command hints  
 * `alias` - Manage command aliases  
@@ -115,7 +116,6 @@ public class MathUtils
 }
 ```
 Key points about libraries:
- Key points about libraries:
 
 * Place in `Extensions/` folder
 * Can contain multiple utility classes
@@ -235,7 +235,8 @@ Mugs/
 ├── Commands/          # Built-in command implementations
 ├── Models/            # Data structures
 ├── Services/          # Core functionality
-└── Interfaces/        # Public interfaces
+├── Interfaces/        # Public interfaces
+└── Program.cs         # App entry point file
 ```
 
 ### Building from Source
