@@ -12,7 +12,7 @@ namespace Mugs.Services
         private const string GitHubRepoName = "mugs";
         private const string GitHubReleasesUrl = $"https://api.github.com/repos/{GitHubRepoOwner}/{GitHubRepoName}/releases/latest";
         private static readonly HttpClient _httpClient = new HttpClient();
-        private static readonly Version CurrentVersion = new Version("1.1.0");
+        private static readonly Version CurrentVersion = new Version("1.1.1");
 
         static UpdateCheckerService()
         {

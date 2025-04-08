@@ -43,7 +43,7 @@ namespace Mugs.Commands
             var info = new[]
             {
                 $"{$"{LocalizationService.GetString("application")}:",-15} Mugs Console Add-on Platform",
-                $"{$"{LocalizationService.GetString("version")}:",-15} 1.1.0",
+                $"{$"{LocalizationService.GetString("version")}:",-15} 1.1.1",
                 $"{$"{LocalizationService.GetString("author")}:",-15} Shead (https://github.com/shead0shead)",
                 $"{$"{LocalizationService.GetString("repo")}:",-15} https://github.com/shead0shead/mugs",
                 $"{$"{LocalizationService.GetString("commands")}:",-15} {_manager.GetAllCommands().Count()} {LocalizationService.GetString("available")}",
