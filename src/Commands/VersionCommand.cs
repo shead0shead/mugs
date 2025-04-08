@@ -61,7 +61,7 @@ namespace Mugs.Commands
                 output.AppendLine($"{artLine}  {infoLine}");
             }
 
-            ConsoleHelperService.WriteResponse(output.ToString().TrimEnd());
+            OutputService.WriteResponse(output.ToString().TrimEnd());
             return Task.CompletedTask;
         }
     }

@@ -30,7 +30,7 @@ namespace Mugs.Services
 
                 if (latestVersion > CurrentVersion)
                 {
-                    ConsoleHelperService.WriteResponse("update_available",
+                    OutputService.WriteResponse("update_available",
                         latestVersion,
                         CurrentVersion,
                         release.html_url,
@@ -38,12 +38,12 @@ namespace Mugs.Services
                 }
                 else if (notifyIfNoUpdate)
                 {
-                    ConsoleHelperService.WriteResponse("no_update_available", CurrentVersion);
+                    OutputService.WriteResponse("no_update_available", CurrentVersion);
                 }
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("update_error", ex.Message);
+                OutputService.WriteError("update_error", ex.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace Mugs.Services
         {
             try
             {
-                ConsoleHelperService.WriteResponse("starting_update");
+                OutputService.WriteResponse("starting_update");
 
                 var response = await _httpClient.GetStringAsync(GitHubReleasesUrl);
                 dynamic release = JsonConvert.DeserializeObject(response);
@@ -77,7 +77,7 @@ namespace Mugs.Services
                     Directory.Delete(tempDir, true);
                 Directory.CreateDirectory(tempDir);
 
-                ConsoleHelperService.WriteResponse("downloading_update");
+                OutputService.WriteResponse("downloading_update");
                 string exePath = Path.Combine(tempDir, "Mugs.exe");
                 using (var client = new WebClient())
                 {
@@ -88,14 +88,14 @@ namespace Mugs.Services
                 string currentDir = Path.GetDirectoryName(currentExePath);
                 string backupPath = Path.Combine(currentDir, $"Mugs_backup_{DateTime.Now:yyyyMMddHHmmss}.exe");
 
-                ConsoleHelperService.WriteResponse("creating_backup");
+                OutputService.WriteResponse("creating_backup");
                 File.Copy(currentExePath, backupPath, true);
 
-                ConsoleHelperService.WriteResponse("installing_update");
+                OutputService.WriteResponse("installing_update");
                 File.Delete(currentExePath);
                 File.Move(exePath, currentExePath);
 
-                ConsoleHelperService.WriteResponse("finishing_update");
+                OutputService.WriteResponse("finishing_update");
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = currentExePath,
@@ -107,7 +107,7 @@ namespace Mugs.Services
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("update_failed", ex.Message);
+                OutputService.WriteError("update_failed", ex.Message);
             }
         }
     }

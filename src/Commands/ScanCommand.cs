@@ -46,7 +46,7 @@ namespace Mugs.Commands
         {
             if (args.Length == 0)
             {
-                ConsoleHelperService.WriteError("scan_missing_file");
+                OutputService.WriteError("scan_missing_file");
                 return;
             }
 
@@ -61,8 +61,8 @@ namespace Mugs.Commands
 
             if (!File.Exists(fullPath))
             {
-                ConsoleHelperService.WriteError("scan_file_not_found", fileName);
-                ConsoleHelperService.WriteResponse("full_path_display", Path.GetFullPath(fullPath));
+                OutputService.WriteError("scan_file_not_found", fileName);
+                OutputService.WriteResponse("full_path_display", Path.GetFullPath(fullPath));
                 return;
             }
 
@@ -77,21 +77,21 @@ namespace Mugs.Commands
 
                 if (walker.DangerousCalls.Any())
                 {
-                    ConsoleHelperService.WriteError("scan_issues_found", fileName);
+                    OutputService.WriteError("scan_issues_found", fileName);
                     foreach (var call in walker.DangerousCalls.Distinct().OrderBy(c => c))
                     {
-                        ConsoleHelperService.WriteError($"- {call}");
+                        OutputService.WriteError($"- {call}");
                     }
-                    ConsoleHelperService.WriteResponse("scan_total_issues", walker.DangerousCalls.Count);
+                    OutputService.WriteResponse("scan_total_issues", walker.DangerousCalls.Count);
                 }
                 else
                 {
-                    ConsoleHelperService.WriteResponse("scan_no_issues", fileName);
+                    OutputService.WriteResponse("scan_no_issues", fileName);
                 }
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("scan_error", ex.Message);
+                OutputService.WriteError("scan_error", ex.Message);
             }
         }
 

@@ -40,7 +40,7 @@ namespace Mugs.Commands
                     return;
                 }
 
-                ConsoleHelperService.WriteError("command_not_found", commandName);
+                OutputService.WriteError("command_not_found", commandName);
             }
 
             await ShowAllCommands();
@@ -79,7 +79,7 @@ namespace Mugs.Commands
                 response.AppendLine($"{LocalizationService.GetString("verification")}: ✅ {LocalizationService.GetString("verified_safe")}");
             }
 
-            ConsoleHelperService.WriteResponse(response.ToString().TrimEnd());
+            OutputService.WriteResponse(response.ToString().TrimEnd());
         }
 
         private async Task ShowAllCommands()
@@ -136,7 +136,7 @@ namespace Mugs.Commands
 
             response.AppendLine();
             response.Append(LocalizationService.GetString("command_help"));
-            ConsoleHelperService.WriteResponse(response.ToString());
+            OutputService.WriteResponse(response.ToString());
         }
 
         private string FormatCommandLine(ICommand cmd)

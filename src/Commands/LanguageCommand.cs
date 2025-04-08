@@ -30,7 +30,7 @@ namespace Mugs.Commands
 
                 response.AppendLine(LocalizationService.GetString("available_languages", string.Join(", ", availableLangs)));
 
-                ConsoleHelperService.WriteResponse(response.ToString().TrimEnd());
+                OutputService.WriteResponse(response.ToString().TrimEnd());
             }
             else
             {
@@ -39,12 +39,12 @@ namespace Mugs.Commands
                 {
                     LocalizationService.SetLanguage(langCode);
                     AppSettings.Language = langCode;
-                    ConsoleHelperService.WriteResponse("language_changed",
+                    OutputService.WriteResponse("language_changed",
                         $"{LocalizationService.GetLanguageName(langCode)} ({langCode})");
                 }
                 else
                 {
-                    ConsoleHelperService.WriteError("invalid_language", langCode);
+                    OutputService.WriteError("invalid_language", langCode);
                 }
             }
 

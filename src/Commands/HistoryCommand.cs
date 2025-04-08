@@ -18,14 +18,14 @@ namespace Mugs.Commands
 
         public Task ExecuteAsync(string[] args)
         {
-            var history = ConsoleHelperService.GetCommandHistory();
+            var history = InputService.GetCommandHistory();
             var response = new StringBuilder();
 
             if (args.Length > 0 && args[0] == "--search")
             {
                 if (args.Length < 2)
                 {
-                    ConsoleHelperService.WriteError("missing_search_term");
+                    OutputService.WriteError("missing_search_term");
                     return Task.CompletedTask;
                 }
 
@@ -74,7 +74,7 @@ namespace Mugs.Commands
                 }
             }
 
-            ConsoleHelperService.WriteResponse(response.ToString().TrimEnd());
+            OutputService.WriteResponse(response.ToString().TrimEnd());
             return Task.CompletedTask;
         }
     }

@@ -24,7 +24,7 @@ namespace Mugs.Commands
         {
             if (args.Length == 0)
             {
-                ConsoleHelperService.WriteError("missing_debug_command");
+                OutputService.WriteError("missing_debug_command");
                 return;
             }
 
@@ -34,12 +34,12 @@ namespace Mugs.Commands
             var command = _manager.GetCommand(commandName);
             if (command == null)
             {
-                ConsoleHelperService.WriteError("command_not_found", commandName);
+                OutputService.WriteError("command_not_found", commandName);
                 return;
             }
 
-            ConsoleHelperService.WriteDebug(LocalizationService.GetString("debug_start", commandName, string.Join(" ", commandArgs)));
-            ConsoleHelperService.WriteDebug(LocalizationService.GetString("debug_vars", JsonConvert.SerializeObject(commandArgs)));
+            OutputService.WriteDebug(LocalizationService.GetString("debug_start", commandName, string.Join(" ", commandArgs)));
+            OutputService.WriteDebug(LocalizationService.GetString("debug_vars", JsonConvert.SerializeObject(commandArgs)));
 
             try
             {
@@ -47,11 +47,11 @@ namespace Mugs.Commands
                 await command.ExecuteAsync(commandArgs);
                 stopwatch.Stop();
 
-                ConsoleHelperService.WriteDebug(LocalizationService.GetString("debug_completed", stopwatch.ElapsedMilliseconds));
+                OutputService.WriteDebug(LocalizationService.GetString("debug_completed", stopwatch.ElapsedMilliseconds));
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteDebug(LocalizationService.GetString("debug_error", ex.GetType().Name, ex.Message));
+                OutputService.WriteDebug(LocalizationService.GetString("debug_error", ex.GetType().Name, ex.Message));
                 throw;
             }
         }

@@ -86,7 +86,7 @@ namespace Mugs.Services
                 }
                 catch (Exception ex)
                 {
-                    ConsoleHelperService.WriteError($"Error loading language file {Path.GetFileName(file)}: {ex.Message}");
+                    OutputService.WriteError($"Error loading language file {Path.GetFileName(file)}: {ex.Message}");
                 }
             }
 
@@ -461,7 +461,7 @@ namespace Mugs.Services
             }
             else
             {
-                ConsoleHelperService.WriteError($"Language '{languageCode}' not found. Using default 'en'");
+                OutputService.WriteError($"Language '{languageCode}' not found. Using default 'en'");
                 _currentLanguage = _allLanguages["en"].Translations;
                 _currentLanguageCode = "en";
             }

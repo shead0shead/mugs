@@ -28,7 +28,7 @@ namespace Mugs.Services
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("verified_load_error", ex.Message);
+                OutputService.WriteError("verified_load_error", ex.Message);
                 _verifiedHashes = new Dictionary<string, string>();
                 _hashesLoaded = true;
             }

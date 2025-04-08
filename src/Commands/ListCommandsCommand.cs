@@ -68,7 +68,7 @@ namespace Mugs.Commands
                 response.AppendLine("\n" + LocalizationService.GetString("enable_usage"));
             }
 
-            ConsoleHelperService.WriteResponse(response.ToString().TrimEnd());
+            OutputService.WriteResponse(response.ToString().TrimEnd());
         }
     }
 }

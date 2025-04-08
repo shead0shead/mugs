@@ -29,7 +29,7 @@ namespace Mugs.Commands
         {
             if (args.Length == 0)
             {
-                ConsoleHelperService.WriteError("missing_url");
+                OutputService.WriteError("missing_url");
                 return;
             }
 

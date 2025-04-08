@@ -39,7 +39,7 @@ namespace Mugs.Services
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("cache_save_error", ex.Message);
+                OutputService.WriteError("cache_save_error", ex.Message);
             }
         }
 

@@ -19,10 +19,10 @@ namespace Mugs.Commands
 
         public async Task ExecuteAsync(string[] args)
         {
-            ConsoleHelperService.WriteResponse("reloading_commands");
+            OutputService.WriteResponse("reloading_commands");
             MetadataCacheService.Clear();
             await _manager.LoadCommandsAsync();
-            ConsoleHelperService.WriteResponse(LocalizationService.GetString("commands_reloaded") + "\n" + LocalizationService.GetString("cache_cleared"));
+            OutputService.WriteResponse(LocalizationService.GetString("commands_reloaded") + "\n" + LocalizationService.GetString("cache_cleared"));
         }
     }
 }

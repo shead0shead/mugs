@@ -18,7 +18,7 @@ namespace Mugs.Commands
         {
             if (args.Length > 0 && args[0].Equals("install", StringComparison.OrdinalIgnoreCase))
             {
-                ConsoleHelperService.WriteResponse("confirm_update");
+                OutputService.WriteResponse("confirm_update");
                 var response = Console.ReadLine();
                 if (response.Equals("y", StringComparison.OrdinalIgnoreCase))
                 {
@@ -26,7 +26,7 @@ namespace Mugs.Commands
                 }
                 else
                 {
-                    ConsoleHelperService.WriteResponse("update_cancelled");
+                    OutputService.WriteResponse("update_cancelled");
                 }
             }
             else

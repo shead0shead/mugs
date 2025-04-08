@@ -16,7 +16,7 @@ namespace Mugs.Services
         {
             if (string.IsNullOrEmpty(name))
             {
-                ConsoleHelperService.WriteError("missing_extension_name");
+                OutputService.WriteError("missing_extension_name");
                 return;
             }
 
@@ -28,7 +28,7 @@ namespace Mugs.Services
                 disabledFile = Path.Combine(_extensionsPath, name);
                 if (!File.Exists(disabledFile))
                 {
-                    ConsoleHelperService.WriteError("extension_not_found", name);
+                    OutputService.WriteError("extension_not_found", name);
                     return;
                 }
 
@@ -51,19 +51,19 @@ namespace Mugs.Services
                     }
                     else
                     {
-                        ConsoleHelperService.WriteError("no_disabled_extensions", commandName);
+                        OutputService.WriteError("no_disabled_extensions", commandName);
                         return;
                     }
                 }
 
                 if (disabledFiles.Count > 1)
                 {
-                    ConsoleHelperService.WriteResponse("multiple_extensions", commandName);
+                    OutputService.WriteResponse("multiple_extensions", commandName);
                     foreach (var file in disabledFiles)
                     {
-                        ConsoleHelperService.WriteResponse($"- {Path.GetFileName(file)}");
+                        OutputService.WriteResponse($"- {Path.GetFileName(file)}");
                     }
-                    ConsoleHelperService.WriteError("specify_filename");
+                    OutputService.WriteError("specify_filename");
                     return;
                 }
 
@@ -72,14 +72,14 @@ namespace Mugs.Services
             }
 
             File.Move(disabledFile, enabledFile);
-            ConsoleHelperService.WriteResponse("extension_enabled", Path.GetFileName(enabledFile));
+            OutputService.WriteResponse("extension_enabled", Path.GetFileName(enabledFile));
         }
 
         public async Task DisableExtensionAsync(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
-                ConsoleHelperService.WriteError("missing_extension_name");
+                OutputService.WriteError("missing_extension_name");
                 return;
             }
 
@@ -91,7 +91,7 @@ namespace Mugs.Services
                 sourceFile = Path.Combine(_extensionsPath, name);
                 if (!File.Exists(sourceFile))
                 {
-                    ConsoleHelperService.WriteError("extension_not_found", name);
+                    OutputService.WriteError("extension_not_found", name);
                     return;
                 }
 
@@ -113,22 +113,22 @@ namespace Mugs.Services
                         sourceFile = possibleFile;
                         disabledFile = possibleFile + ".disable";
                         File.Move(sourceFile, disabledFile);
-                        ConsoleHelperService.WriteResponse("extension_disabled", Path.GetFileName(sourceFile));
+                        OutputService.WriteResponse("extension_disabled", Path.GetFileName(sourceFile));
                         return;
                     }
 
-                    ConsoleHelperService.WriteError("command_not_found_disable", commandName);
+                    OutputService.WriteError("command_not_found_disable", commandName);
                     return;
                 }
 
                 if (sourceFiles.Count > 1)
                 {
-                    ConsoleHelperService.WriteResponse("multiple_extensions", commandName);
+                    OutputService.WriteResponse("multiple_extensions", commandName);
                     foreach (var file in sourceFiles)
                     {
-                        ConsoleHelperService.WriteResponse($"- {Path.GetFileName(file)}");
+                        OutputService.WriteResponse($"- {Path.GetFileName(file)}");
                     }
-                    ConsoleHelperService.WriteError("specify_filename");
+                    OutputService.WriteError("specify_filename");
                     return;
                 }
 
@@ -137,14 +137,14 @@ namespace Mugs.Services
             }
 
             File.Move(sourceFile, disabledFile);
-            ConsoleHelperService.WriteResponse("extension_disabled", Path.GetFileName(sourceFile));
+            OutputService.WriteResponse("extension_disabled", Path.GetFileName(sourceFile));
         }
 
         public async Task ImportFromUrlAsync(string url)
         {
             try
             {
-                ConsoleHelperService.WriteResponse("downloading_extension", url);
+                OutputService.WriteResponse("downloading_extension", url);
 
                 using var client = new HttpClient();
                 var response = await client.GetAsync(url);
@@ -157,11 +157,11 @@ namespace Mugs.Services
                 await using var fileStream = File.Create(filePath);
                 await stream.CopyToAsync(fileStream);
 
-                ConsoleHelperService.WriteResponse("extension_downloaded", fileName);
+                OutputService.WriteResponse("extension_downloaded", fileName);
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("download_error", ex.Message);
+                OutputService.WriteError("download_error", ex.Message);
             }
         }
     }

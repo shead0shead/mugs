@@ -20,13 +20,13 @@ namespace Mugs.Models
             _extensionsPath = extensionsPath;
         }
 
-        public void Print(string message) => ConsoleHelperService.WriteResponse(message);
-        public void PrintError(string message) => ConsoleHelperService.WriteError(message);
+        public void Print(string message) => OutputService.WriteResponse(message);
+        public void PrintError(string message) => OutputService.WriteError(message);
         public string ReadLine() => Console.ReadLine();
         public string Version => "1.0";
 
-        public void DebugLog(string message) => ConsoleHelperService.WriteDebug(message);
-        public void DebugVar(string name, object value) => ConsoleHelperService.WriteDebug($"{name} = {JsonConvert.SerializeObject(value)}");
+        public void DebugLog(string message) => OutputService.WriteDebug(message);
+        public void DebugVar(string name, object value) => OutputService.WriteDebug($"{name} = {JsonConvert.SerializeObject(value)}");
 
         public CommandManager Manager { get; set; }
 

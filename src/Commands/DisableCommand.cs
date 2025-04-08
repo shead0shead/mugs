@@ -29,7 +29,7 @@ namespace Mugs.Commands
         {
             if (args.Length == 0)
             {
-                ConsoleHelperService.WriteError("missing_extension_name");
+                OutputService.WriteError("missing_extension_name");
                 return;
             }
 

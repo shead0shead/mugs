@@ -21,7 +21,7 @@ namespace Mugs.Commands
         {
             if (args.Length == 0)
             {
-                ConsoleHelperService.WriteError("missing_command_name");
+                OutputService.WriteError("missing_command_name");
                 return Task.CompletedTask;
             }
 
@@ -31,7 +31,7 @@ namespace Mugs.Commands
 
             if (File.Exists(filePath))
             {
-                ConsoleHelperService.WriteError("file_exists", fileName);
+                OutputService.WriteError("file_exists", fileName);
                 return Task.CompletedTask;
             }
 
@@ -64,8 +64,8 @@ namespace Mugs.Commands
                 new {char.ToUpper(commandName[0]) + commandName.Substring(1)}Command()";
 
             File.WriteAllText(filePath, template);
-            ConsoleHelperService.WriteResponse("template_created", fileName);
-            ConsoleHelperService.WriteResponse("reload_usage");
+            OutputService.WriteResponse("template_created", fileName);
+            OutputService.WriteResponse("reload_usage");
 
             return Task.CompletedTask;
         }

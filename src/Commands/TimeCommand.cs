@@ -16,7 +16,7 @@ namespace Mugs.Commands
 
         public Task ExecuteAsync(string[] args)
         {
-            ConsoleHelperService.WriteResponse("current_time", DateTime.Now.ToString("T"));
+            OutputService.WriteResponse("current_time", DateTime.Now.ToString("T"));
             return Task.CompletedTask;
         }
     }

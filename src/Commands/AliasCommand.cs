@@ -23,7 +23,7 @@ namespace Mugs.Commands
                 var aliases = AliasManagerService.GetAllAliases();
                 if (!aliases.Any())
                 {
-                    ConsoleHelperService.WriteResponse("alias_no_aliases");
+                    OutputService.WriteResponse("alias_no_aliases");
                     return Task.CompletedTask;
                 }
 
@@ -32,7 +32,7 @@ namespace Mugs.Commands
                 {
                     response.AppendLine($"- {alias.Key} => {alias.Value}");
                 }
-                ConsoleHelperService.WriteResponse(response.ToString().TrimEnd());
+                OutputService.WriteResponse(response.ToString().TrimEnd());
                 return Task.CompletedTask;
             }
 
@@ -40,18 +40,18 @@ namespace Mugs.Commands
             {
                 case "add" when args.Length >= 3:
                     AliasManagerService.AddAlias(args[1], args[2]);
-                    ConsoleHelperService.WriteResponse("alias_added", args[2], args[1]);
+                    OutputService.WriteResponse("alias_added", args[2], args[1]);
                     break;
 
                 case "remove" when args.Length >= 2:
                     if (AliasManagerService.RemoveAlias(args[1]))
-                        ConsoleHelperService.WriteResponse("alias_removed", args[1]);
+                        OutputService.WriteResponse("alias_removed", args[1]);
                     else
-                        ConsoleHelperService.WriteError("alias_not_found");
+                        OutputService.WriteError("alias_not_found");
                     break;
 
                 default:
-                    ConsoleHelperService.WriteError("alias_invalid_syntax");
+                    OutputService.WriteError("alias_invalid_syntax");
                     break;
             }
             return Task.CompletedTask;

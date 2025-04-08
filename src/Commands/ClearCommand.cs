@@ -32,7 +32,7 @@ namespace Mugs.Commands
                 Console.Write("\x1b[2J\x1b[H");
             }
 
-            ConsoleHelperService.Initialize();
+            InputService.Initialize();
             return Task.CompletedTask;
         }
     }

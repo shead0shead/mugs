@@ -18,7 +18,7 @@ namespace Mugs.Commands
         public Task ExecuteAsync(string[] args)
         {
             AppSettings.EnableSuggestions = !AppSettings.EnableSuggestions;
-            ConsoleHelperService.WriteResponse(AppSettings.EnableSuggestions
+            OutputService.WriteResponse(AppSettings.EnableSuggestions
                 ? LocalizationService.GetString("suggestions_enabled")
                 : LocalizationService.GetString("suggestions_disabled"));
             return Task.CompletedTask;

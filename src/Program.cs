@@ -12,7 +12,7 @@ public class Program
         MetadataCacheService.Initialize();
         AliasManagerService.Initialize();
         AppSettings.Initialize();
-        ConsoleHelperService.Initialize();
+        InputService.Initialize();
         LocalizationService.Initialize();
 
         Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -20,28 +20,28 @@ public class Program
 
         if (args.All(a => a != "--updated"))
         {
-            ConsoleHelperService.WriteResponse("checking_updates");
+            OutputService.WriteResponse("checking_updates");
             await UpdateCheckerService.CheckForUpdatesAsync();
         }
         else
         {
-            ConsoleHelperService.WriteResponse("update_success");
+            OutputService.WriteResponse("update_success");
         }
 
         var manager = new CommandManager(ExtensionsFolder);
         await manager.LoadCommandsAsync();
 
-        ConsoleHelperService.WriteResponse("welcome_message");
+        OutputService.WriteResponse("welcome_message");
 
         while (true)
         {
-            var input = ConsoleHelperService.ReadLineWithColorHighlighting(manager);
+            var input = InputService.ReadLineWithColorHighlighting(manager);
 
             if (string.IsNullOrEmpty(input)) continue;
 
             if (input.Equals("exit", StringComparison.OrdinalIgnoreCase))
             {
-                ConsoleHelperService.WriteResponse("exit_confirmation");
+                OutputService.WriteResponse("exit_confirmation");
                 var confirm = Console.ReadLine();
                 if (confirm.Equals("y", StringComparison.OrdinalIgnoreCase))
                     break;
@@ -55,7 +55,7 @@ public class Program
             var command = manager.GetCommand(commandName);
             if (command == null)
             {
-                ConsoleHelperService.WriteError("command_not_found", commandName);
+                OutputService.WriteError("command_not_found", commandName);
                 continue;
             }
 
@@ -65,7 +65,7 @@ public class Program
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("command_error", ex.Message);
+                OutputService.WriteError("command_error", ex.Message);
             }
         }
     }

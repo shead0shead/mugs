@@ -84,7 +84,7 @@ namespace Mugs.Services
                 }
                 catch (Exception ex)
                 {
-                    ConsoleHelperService.WriteError("Error loading command: {0}", ex.Message);
+                    OutputService.WriteError("Error loading command: {0}", ex.Message);
                 }
             }
 
@@ -217,12 +217,12 @@ namespace Mugs.Services
             }
             catch (CompilationErrorException ex)
             {
-                ConsoleHelperService.WriteError($"Script compilation error: {string.Join(Environment.NewLine, ex.Diagnostics)}");
+                OutputService.WriteError($"Script compilation error: {string.Join(Environment.NewLine, ex.Diagnostics)}");
                 return Enumerable.Empty<ICommand>();
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError($"Script execution error in '{Path.GetFileName(filePath)}': {ex.Message}");
+                OutputService.WriteError($"Script execution error in '{Path.GetFileName(filePath)}': {ex.Message}");
                 return Enumerable.Empty<ICommand>();
             }
         }

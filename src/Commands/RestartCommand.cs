@@ -18,7 +18,7 @@ namespace Mugs.Commands
 
         public Task ExecuteAsync(string[] args)
         {
-            ConsoleHelperService.WriteResponse("restarting");
+            OutputService.WriteResponse("restarting");
 
             var currentProcess = Process.GetCurrentProcess();
             var startInfo = new ProcessStartInfo

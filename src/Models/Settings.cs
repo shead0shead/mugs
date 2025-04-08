@@ -67,7 +67,7 @@ namespace Mugs.Models
             }
             catch (Exception ex)
             {
-                ConsoleHelperService.WriteError("settings_error", ex.Message);
+                OutputService.WriteError("settings_error", ex.Message);
             }
         }
     }
