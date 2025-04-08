@@ -1,5 +1,8 @@
 ﻿// Mugs/Services/LoggerService.cs
 
+using System.Drawing;
+using Mugs.Models;
+
 namespace Mugs.Services
 {
     public static class LoggerService
@@ -25,6 +28,21 @@ namespace Mugs.Services
             lock (_lock)
             {
                 File.AppendAllText(LogFilePath, logEntry + Environment.NewLine);
+            }
+
+            if (AppSettings.EnableConsoleLogging)
+            {
+                var color = level switch
+                {
+                    LogLevel.Debug => ConsoleColor.DarkGray,
+                    LogLevel.Info => ConsoleColor.Gray,
+                    LogLevel.Warning => ConsoleColor.Yellow,
+                    LogLevel.Error => ConsoleColor.Red,
+                    LogLevel.Critical => ConsoleColor.DarkRed,
+                    _ => ConsoleColor.Gray
+                };
+
+                OutputService.WriteLog(logEntry, color);
             }
         }
 
