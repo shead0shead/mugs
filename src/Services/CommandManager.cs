@@ -26,11 +26,21 @@ namespace Mugs.Services
 
         public async Task LoadCommandsAsync()
         {
-            _commands.Clear();
-            ScriptCacheService.Clear();
-            MetadataCacheService.Clear();
-            RegisterBuiltInCommands();
-            await LoadExternalCommandsAsync();
+            LoggerService.LogInfo("Loading commands...");
+            try
+            {
+                _commands.Clear();
+                ScriptCacheService.Clear();
+                MetadataCacheService.Clear();
+                RegisterBuiltInCommands();
+                await LoadExternalCommandsAsync();
+                LoggerService.LogInfo($"Loaded {_commands.Count} commands");
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogError("Failed to load commands", ex);
+                throw;
+            }
         }
 
         private void RegisterBuiltInCommands()

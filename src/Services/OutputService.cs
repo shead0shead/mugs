@@ -11,6 +11,7 @@ namespace Mugs.Services
         {
             var message = LocalizationService.GetString(messageKey, args);
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            LoggerService.LogInfo($"Response: {message}");
 
             foreach (var line in lines)
             {
@@ -26,6 +27,7 @@ namespace Mugs.Services
         {
             var message = LocalizationService.GetString(messageKey, args);
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            LoggerService.LogError($"Error: {message}");
 
             foreach (var line in lines)
             {
@@ -40,6 +42,7 @@ namespace Mugs.Services
         public static void WriteDebug(string message)
         {
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            LoggerService.LogDebug($"Debug: {message}");
 
             foreach (var line in lines)
             {
