@@ -52,5 +52,19 @@ namespace Mugs.Services
                 Console.WriteLine(line);
             }
         }
+
+        public static void WriteLog(string message, ConsoleColor color)
+        {
+            var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+            foreach (var line in lines)
+            {
+                Console.ForegroundColor = color;
+                Console.Write($"{BorderChar} ");
+                Console.ResetColor();
+                Console.WriteLine(line);
+            }
+            Console.WriteLine();
+        }
     }
 }
