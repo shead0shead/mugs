@@ -270,6 +270,13 @@ namespace Mugs.Services
                 ["available"] = "available",
                 ["loaded"] = "loaded",
 
+                // Logging command
+                ["logging_description"] = "Enables or disables console logging output",
+                ["logging_state"] = "Console logging is currently {0}",
+                ["logging_enabled"] = "Console logging enabled",
+                ["logging_disabled"] = "Console logging disabled",
+                ["logging_invalid_arg"] = "Invalid argument. Use 'on' or 'off'",
+
                 // Settings
                 ["verified_load_error"] = "Error loading verified hashes: {0}",
                 ["settings_error"] = "Error saving settings: {0}"
@@ -445,6 +452,13 @@ namespace Mugs.Services
                 ["extensions"] = "Расширения",
                 ["available"] = "доступно",
                 ["loaded"] = "загружено",
+
+                // Команда logging
+                ["logging_description"] = "Включает или отключает вывод логов в консоль",
+                ["logging_state"] = "Вывод логов в консоль сейчас {0}",
+                ["logging_enabled"] = "Вывод логов в консоль включен",
+                ["logging_disabled"] = "Вывод логов в консоль отключен",
+                ["logging_invalid_arg"] = "Неверный аргумент. Используйте 'on' или 'off'",
 
                 // Настройки
                 ["verified_load_error"] = "Ошибка загрузки проверенных хешей: {0}",
