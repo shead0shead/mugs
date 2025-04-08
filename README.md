@@ -18,6 +18,7 @@ Mugs is a powerful console utility with support for dynamic command loading thro
 * **Command debugging** with execution time output  
 * **Metadata caching** for fast command loading  
 * **Verified extensions** with hash verification  
+* **Logging** of command execution and errors  
 
 ## Installation
 
