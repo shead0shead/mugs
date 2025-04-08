@@ -16,7 +16,7 @@ namespace Mugs.Commands
             "time", "update", "new", "debug", "enable",
             "disable", "import", "language", "script",
             "suggestions", "alias", "scan", "history",
-            "version"
+            "version", "logging"
         };
 
         public HelpCommand(CommandManager manager) => _manager = manager;
