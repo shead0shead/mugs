@@ -71,7 +71,7 @@ public class MyCommand : ICommand
     public async Task ExecuteAsync(string[] args)
     {
         // Output command arguments to console
-        ConsoleHelperService.WriteResponse($"Command executed with args: {string.Join(", ", args)}");
+        OutputService.WriteResponse($"Command executed with args: {string.Join(", ", args)}");
         
         // Use shared data between commands
         SetSharedData("mykey", "value");
@@ -143,7 +143,7 @@ public class MathCommand : ICommand
         // Validate argument count
         if (args.Length != 3)
         {
-            ConsoleHelperService.WriteResponse("Usage: math [add|sub|mul|div] x y");
+            OutputService.WriteResponse("Usage: math [add|sub|mul|div] x y");
             return;
         }
 
@@ -164,12 +164,12 @@ public class MathCommand : ICommand
             };
             
             // Output formatted result
-            ConsoleHelperService.WriteResponse($"Result: {result}");
+            OutputService.WriteResponse($"Result: {result}");
         }
         catch (Exception ex)
         {
             // Handle parsing and calculation errors
-            ConsoleHelperService.WriteError(ex.Message);
+            OutputService.WriteError(ex.Message);
         }
     }
 }
