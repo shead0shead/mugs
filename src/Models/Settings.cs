@@ -15,6 +15,7 @@ namespace Mugs.Models
         {
             public string Language { get; set; } = "en";
             public bool EnableSuggestions { get; set; } = true;
+            public bool EnableConsoleLogging { get; set; } = false;
         }
 
         public static void Initialize()
@@ -54,6 +55,16 @@ namespace Mugs.Models
             set
             {
                 _currentSettings.EnableSuggestions = value;
+                SaveSettings();
+            }
+        }
+
+        public static bool EnableConsoleLogging
+        {
+            get => _currentSettings.EnableConsoleLogging;
+            set
+            {
+                _currentSettings.EnableConsoleLogging = value;
                 SaveSettings();
             }
         }
