@@ -1,12 +1,12 @@
 {
-    "latestVersion": "1.2.0",
+    "latestVersion": "1.2.1",
     "critical": false,
-    "changelog": "• Enhance application update system",
+    "changelog": "• Fix minor code issues",
     "assets": [
       {
         "fileName": "Mugs.exe",
-        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.2.0/Mugs.exe",
-        "sha256": "5d248e390ab00698437e2b8b00266ff8161a1e5697bca671813076c7975e7281"
+        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.2.1/Mugs.exe",
+        "sha256": "267a6d5c9f0f1fac8ba5b64c7d4bcdd7a7e81d8595e41ba010b0b8baf5e2905d"
       },
       {
         "fileName": "en.json",
