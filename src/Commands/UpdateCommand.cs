@@ -2,9 +2,9 @@
 
 using Mugs.Services;
 using Mugs.Interfaces;
+using Mugs.Models;
 
 using System.Text;
-using Mugs.Models;
 
 namespace Mugs.Commands
 {
@@ -55,7 +55,7 @@ namespace Mugs.Commands
             }
 
             var response = new StringBuilder();
-            response.AppendLine(LocalizationService.GetString("update_status"));
+            response.AppendLine(LocalizationService.GetString("update_status") + "\n");
             response.AppendLine($"{LocalizationService.GetString("current_version")}: {UpdateCheckerService.CurrentVersion}");
             response.AppendLine($"{LocalizationService.GetString("latest_version")}: {manifest.LatestVersion}");
             response.AppendLine($"{LocalizationService.GetString("auto_update_status")}: " +
@@ -69,7 +69,7 @@ namespace Mugs.Commands
                     $"{AppSettings.AutoCheckIntervalHours} {LocalizationService.GetString("hours")}");
             }
 
-            OutputService.WriteResponse(response.ToString());
+            OutputService.WriteResponse(response.ToString().TrimEnd());
         }
 
         private async Task InstallUpdate(string[] args)
@@ -116,7 +116,7 @@ namespace Mugs.Commands
                 status.AppendLine($"{LocalizationService.GetString("last_check_time")}: " +
                     $"{AppSettings.LastUpdateCheck:g}");
 
-                OutputService.WriteResponse(status.ToString());
+                OutputService.WriteResponse(status.ToString().TrimEnd());
                 return;
             }
 
