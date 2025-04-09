@@ -1,0 +1,22 @@
+{
+    "latestVersion": "1.2.0",
+    "critical": false,
+    "changelog": "• Enhance application update system",
+    "assets": [
+      {
+        "fileName": "Mugs.exe",
+        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.2.0/Mugs.exe",
+        "sha256": "5d248e390ab00698437e2b8b00266ff8161a1e5697bca671813076c7975e7281"
+      },
+      {
+        "fileName": "en.json",
+        "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/en.json",
+        "sha256": "2d9eebbfbe4ad76d7a4103ee3170013dfb651546681e1add7ea814ed114d03a0"
+      },
+      {
+        "fileName": "ru.json",
+        "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/ru.json",
+        "sha256": "191cbd1b12b2271569e5f0c38a6627872632335e3930b40b96ce162ae834262b"
+      }
+    ]
+  }
