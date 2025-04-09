@@ -16,6 +16,9 @@ namespace Mugs.Models
             public string Language { get; set; } = "en";
             public bool EnableSuggestions { get; set; } = true;
             public bool EnableConsoleLogging { get; set; } = false;
+            public bool AutoUpdateCheck { get; set; } = true;
+            public int AutoUpdateInterval { get; set; } = 24;
+            public DateTime LastUpdateCheck { get; set; } = DateTime.MinValue;
         }
 
         public static void Initialize()
@@ -65,6 +68,36 @@ namespace Mugs.Models
             set
             {
                 _currentSettings.EnableConsoleLogging = value;
+                SaveSettings();
+            }
+        }
+
+        public static bool AutoCheckEnabled
+        {
+            get => _currentSettings.AutoUpdateCheck;
+            set
+            {
+                _currentSettings.AutoUpdateCheck = value;
+                SaveSettings();
+            }
+        }
+
+        public static int AutoCheckIntervalHours
+        {
+            get => _currentSettings.AutoUpdateInterval;
+            set
+            {
+                _currentSettings.AutoUpdateInterval = value;
+                SaveSettings();
+            }
+        }
+
+        public static DateTime LastUpdateCheck
+        {
+            get => _currentSettings.LastUpdateCheck;
+            set
+            {
+                _currentSettings.LastUpdateCheck = value;
                 SaveSettings();
             }
         }

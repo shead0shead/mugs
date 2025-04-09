@@ -1,8 +1,11 @@
 ﻿// Mugs/Services/UpdateCheckerService.cs
 
+using Mugs.Models;
+
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace Mugs.Services
 {
@@ -10,31 +13,54 @@ namespace Mugs.Services
     {
         private const string GitHubRepoOwner = "shead0shead";
         private const string GitHubRepoName = "mugs";
-        private const string GitHubReleasesUrl = $"https://api.github.com/repos/{GitHubRepoOwner}/{GitHubRepoName}/releases/latest";
+        private const string ManifestUrl = $"https://raw.githubusercontent.com/{GitHubRepoOwner}/{GitHubRepoName}/main/update_manifest.json";
         private static readonly HttpClient _httpClient = new HttpClient();
-        private static readonly Version CurrentVersion = new Version("1.1.2");
+        public static readonly Version CurrentVersion = new Version("1.2.0");
 
         static UpdateCheckerService()
         {
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "ConsoleAppUpdater");
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "MugsUpdater");
+            _httpClient.Timeout = TimeSpan.FromSeconds(15);
         }
 
-        public static async Task CheckForUpdatesAsync(bool notifyIfNoUpdate = false)
+        public static async Task<UpdateManifest> GetUpdateManifestAsync()
         {
             try
             {
-                var response = await _httpClient.GetStringAsync(GitHubReleasesUrl);
-                dynamic release = JsonConvert.DeserializeObject(response);
-                var latestVersion = new Version(release.tag_name.ToString().TrimStart('v'));
+                var response = await _httpClient.GetStringAsync(ManifestUrl);
+                return JsonConvert.DeserializeObject<UpdateManifest>(response);
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        public static async Task CheckForUpdatesAsync(bool notifyIfNoUpdate = false, bool automaticCheck = false)
+        {
+            try
+            {
+                var manifest = await GetUpdateManifestAsync();
+                if (manifest == null)
+                {
+                    if (!automaticCheck)
+                        OutputService.WriteError("update_manifest_error");
+                    return;
+                }
+
+                var latestVersion = new Version(manifest.LatestVersion);
                 if (latestVersion > CurrentVersion)
                 {
                     OutputService.WriteResponse("update_available",
                         latestVersion,
                         CurrentVersion,
-                        release.html_url,
-                        release.body);
+                        manifest.Changelog,
+                        manifest.Critical ? "CRITICAL" : "regular");
+
+                    if (manifest.Critical)
+                    {
+                        OutputService.WriteResponse("critical_update_warning");
+                    }
                 }
                 else if (notifyIfNoUpdate)
                 {
@@ -43,57 +69,62 @@ namespace Mugs.Services
             }
             catch (Exception ex)
             {
-                OutputService.WriteError("update_error", ex.Message);
+                if (!automaticCheck)
+                    OutputService.WriteError("update_error", ex.Message);
             }
         }
 
-        public static async Task InstallUpdateAsync()
+        public static async Task InstallUpdateAsync(UpdateManifest manifest = null)
         {
             try
             {
+                manifest ??= await GetUpdateManifestAsync();
+                if (manifest == null)
+                {
+                    OutputService.WriteError("update_manifest_error");
+                    return;
+                }
+
                 OutputService.WriteResponse("starting_update");
-
-                var response = await _httpClient.GetStringAsync(GitHubReleasesUrl);
-                dynamic release = JsonConvert.DeserializeObject(response);
-                string version = release.tag_name;
-
-                string downloadUrl = null;
-                foreach (var asset in release.assets)
-                {
-                    if (asset.name.ToString().Equals("Mugs.exe", StringComparison.OrdinalIgnoreCase))
-                    {
-                        downloadUrl = asset.browser_download_url.ToString();
-                        break;
-                    }
-                }
-
-                if (downloadUrl == null)
-                {
-                    throw new Exception("Mugs.exe not found in release assets");
-                }
 
                 string tempDir = Path.Combine(Path.GetTempPath(), "MugsUpdate");
                 if (Directory.Exists(tempDir))
                     Directory.Delete(tempDir, true);
                 Directory.CreateDirectory(tempDir);
 
-                OutputService.WriteResponse("downloading_update");
-                string exePath = Path.Combine(tempDir, "Mugs.exe");
-                using (var client = new WebClient())
+                foreach (var asset in manifest.Assets)
                 {
-                    await client.DownloadFileTaskAsync(new Uri(downloadUrl), exePath);
+                    await DownloadFileWithProgress(asset.DownloadUrl,
+                        Path.Combine(tempDir, asset.FileName),
+                        asset.SHA256);
                 }
 
+                OutputService.WriteResponse("creating_backup");
                 string currentExePath = Process.GetCurrentProcess().MainModule.FileName;
                 string currentDir = Path.GetDirectoryName(currentExePath);
-                string backupPath = Path.Combine(currentDir, $"Mugs_backup_{DateTime.Now:yyyyMMddHHmmss}.exe");
+                string backupDir = Path.Combine(currentDir, $"Backup_{DateTime.Now:yyyyMMddHHmmss}");
+                Directory.CreateDirectory(backupDir);
 
-                OutputService.WriteResponse("creating_backup");
-                File.Copy(currentExePath, backupPath, true);
+                foreach (var asset in manifest.Assets)
+                {
+                    string targetPath = Path.Combine(currentDir, asset.FileName);
+                    if (File.Exists(targetPath))
+                    {
+                        File.Copy(targetPath, Path.Combine(backupDir, asset.FileName));
+                    }
+                }
 
                 OutputService.WriteResponse("installing_update");
-                File.Delete(currentExePath);
-                File.Move(exePath, currentExePath);
+                foreach (var asset in manifest.Assets)
+                {
+                    string sourcePath = Path.Combine(tempDir, asset.FileName);
+                    string targetPath = Path.Combine(currentDir, asset.FileName);
+
+                    if (File.Exists(targetPath))
+                        File.Delete(targetPath);
+
+                    File.Move(sourcePath, targetPath);
+                }
 
                 OutputService.WriteResponse("finishing_update");
                 Process.Start(new ProcessStartInfo
@@ -109,6 +140,33 @@ namespace Mugs.Services
             {
                 OutputService.WriteError("update_failed", ex.Message);
             }
+        }
+
+        private static async Task DownloadFileWithProgress(string url, string filePath, string expectedHash)
+        {
+            using var client = new WebClient();
+            var progress = new Progress<float>(p =>
+                OutputService.WriteResponse("download_progress", Path.GetFileName(filePath), (int)(p * 100)));
+
+            await client.DownloadFileTaskAsync(new Uri(url), filePath);
+
+            if (!string.IsNullOrEmpty(expectedHash))
+            {
+                var actualHash = await CalculateFileHash(filePath);
+                if (!actualHash.Equals(expectedHash, StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Delete(filePath);
+                    throw new Exception($"Hash mismatch for {Path.GetFileName(filePath)}");
+                }
+            }
+        }
+
+        private static async Task<string> CalculateFileHash(string filePath)
+        {
+            using var sha = SHA256.Create();
+            await using var stream = File.OpenRead(filePath);
+            var hash = await sha.ComputeHashAsync(stream);
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
     }
 }

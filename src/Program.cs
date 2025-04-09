@@ -24,6 +24,14 @@ public class Program
 
             if (args.All(a => a != "--updated"))
             {
+                if (AppSettings.AutoCheckEnabled &&
+                    (DateTime.Now - AppSettings.LastUpdateCheck).TotalHours >=
+                    AppSettings.AutoCheckIntervalHours)
+                {
+                    AppSettings.LastUpdateCheck = DateTime.Now;
+                    await UpdateCheckerService.CheckForUpdatesAsync(false, true);
+                }
+
                 OutputService.WriteResponse("checking_updates");
                 await UpdateCheckerService.CheckForUpdatesAsync();
             }
@@ -33,7 +41,7 @@ public class Program
             }
 
             var manager = new CommandManager(ExtensionsFolder);
-            manager.LoadCommandsAsync().Wait();
+            await manager.LoadCommandsAsync();
 
             LoggerService.LogInfo("Application started successfully");
             OutputService.WriteResponse("welcome_message");
