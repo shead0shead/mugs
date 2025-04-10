@@ -65,6 +65,7 @@ namespace Mugs.Services
             RegisterCommand(new HistoryCommand());
             RegisterCommand(new VersionCommand(this));
             RegisterCommand(new LoggingCommand());
+            RegisterCommand(new ToggleSpinnerCommand());
         }
 
         private async Task LoadExternalCommandsAsync()
