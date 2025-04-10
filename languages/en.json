@@ -146,6 +146,9 @@
     "logging_enabled": "Console logging enabled",
     "logging_disabled": "Console logging disabled",
     "logging_invalid_arg": "Invalid argument. Use 'on' or 'off'",
+    "toggle_spinner_description": "Toggles spinner animation during command execution",
+    "spinner_enabled": "Spinner animation enabled",
+    "spinner_disabled": "Spinner animation disabled",
     "verified_load_error": "Error loading verified hashes: {0}",
     "settings_error": "Error saving settings: {0}"
   }
