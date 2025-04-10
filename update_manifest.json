@@ -1,22 +1,22 @@
 {
-    "latestVersion": "1.2.1",
+    "latestVersion": "1.2.2",
     "critical": false,
-    "changelog": "• Fix minor code issues",
+    "changelog": "• Add spinner loading animation",
     "assets": [
       {
         "fileName": "Mugs.exe",
-        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.2.1/Mugs.exe",
-        "sha256": "267a6d5c9f0f1fac8ba5b64c7d4bcdd7a7e81d8595e41ba010b0b8baf5e2905d"
+        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.2.2/Mugs.exe",
+        "sha256": "cefea5e39b3cc851657369e0998c630026f3ad366209f5a7812b593554598a01"
       },
       {
         "fileName": "en.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/en.json",
-        "sha256": "2d9eebbfbe4ad76d7a4103ee3170013dfb651546681e1add7ea814ed114d03a0"
+        "sha256": "fbbf859c8c7e0e473968560d06c89d1b500d23b095baf861d014b1a0d6828cc2"
       },
       {
         "fileName": "ru.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/ru.json",
-        "sha256": "191cbd1b12b2271569e5f0c38a6627872632335e3930b40b96ce162ae834262b"
+        "sha256": "c34325670799c658c1ec3fd70175cf083f3c458d0c37c25878e836cf60c635f2"
       }
     ]
   }
