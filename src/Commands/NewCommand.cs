@@ -50,12 +50,12 @@ namespace Mugs.Commands
                     public async Task ExecuteAsync(string[] args)
                     {{
                         // Your code here
-                        Print(""Command '{commandName}' executed!"");
+                        OutputService.WriteResponse(""Command '{commandName}' executed!"");
         
                         // Example argument handling
                         if (args.Length > 0)
                         {{
-                            Print($""Received arguments: {{string.Join("", "", args)}}"");
+                            OutputService.WriteResponse($""Received arguments: {{string.Join("", "", args)}}"");
                         }}
                     }}
                 }}
