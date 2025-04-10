@@ -74,7 +74,10 @@ public class Program
 
                 try
                 {
-                    await command.ExecuteAsync(commandArgs);
+                    using (SpinnerService.StartActivity())
+                    {
+                        await command.ExecuteAsync(commandArgs);
+                    }
                 }
                 catch (Exception ex)
                 {
