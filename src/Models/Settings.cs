@@ -19,6 +19,7 @@ namespace Mugs.Models
             public bool AutoUpdateCheck { get; set; } = true;
             public int AutoUpdateInterval { get; set; } = 24;
             public DateTime LastUpdateCheck { get; set; } = DateTime.MinValue;
+            public bool EnableSpinnerAnimation { get; set; } = true;
         }
 
         public static void Initialize()
@@ -98,6 +99,16 @@ namespace Mugs.Models
             set
             {
                 _currentSettings.LastUpdateCheck = value;
+                SaveSettings();
+            }
+        }
+
+        public static bool EnableSpinnerAnimation
+        {
+            get => _currentSettings.EnableSpinnerAnimation;
+            set
+            {
+                _currentSettings.EnableSpinnerAnimation = value;
                 SaveSettings();
             }
         }

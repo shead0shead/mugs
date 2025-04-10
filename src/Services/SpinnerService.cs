@@ -1,5 +1,7 @@
 ﻿// Mugs/Services/SpinnerService.cs
 
+using Mugs.Models;
+
 using System.Text;
 
 namespace Mugs.Services
@@ -16,40 +18,43 @@ namespace Mugs.Services
 
         public static void Start()
         {
-            Stop();
-
-            Console.CursorVisible = false;
-            _cts = new CancellationTokenSource();
-            _spinnerPosition = Console.CursorLeft;
-
-            _originalInput = Console.In;
-            _originalOutput = Console.Out;
-
-            Console.SetIn(new InputInterceptor(Console.In));
-            Console.SetOut(new OutputInterceptor(Console.Out));
-
-            _spinnerTask = Task.Run(async () =>
+            if (AppSettings.EnableSpinnerAnimation)
             {
-                try
+                Stop();
+
+                Console.CursorVisible = false;
+                _cts = new CancellationTokenSource();
+                _spinnerPosition = Console.CursorLeft;
+
+                _originalInput = Console.In;
+                _originalOutput = Console.Out;
+
+                Console.SetIn(new InputInterceptor(Console.In));
+                Console.SetOut(new OutputInterceptor(Console.Out));
+
+                _spinnerTask = Task.Run(async () =>
                 {
-                    await Task.Delay(SpinnerDelayMs, _cts.Token);
-
-                    if (_cts.Token.IsCancellationRequested)
-                        return;
-
-                    var counter = 0;
-                    while (!_cts.Token.IsCancellationRequested)
+                    try
                     {
-                        var spinChar = _spinnerSequence[counter++ % _spinnerSequence.Length];
-                        UpdateSpinner(spinChar);
-                        await Task.Delay(100, _cts.Token);
+                        await Task.Delay(SpinnerDelayMs, _cts.Token);
+
+                        if (_cts.Token.IsCancellationRequested)
+                            return;
+
+                        var counter = 0;
+                        while (!_cts.Token.IsCancellationRequested)
+                        {
+                            var spinChar = _spinnerSequence[counter++ % _spinnerSequence.Length];
+                            UpdateSpinner(spinChar);
+                            await Task.Delay(100, _cts.Token);
+                        }
                     }
-                }
-                catch (TaskCanceledException)
-                {
-                    
-                }
-            }, _cts.Token);
+                    catch (TaskCanceledException)
+                    {
+
+                    }
+                }, _cts.Token);
+            }
         }
 
         public static void Stop()
@@ -118,13 +123,13 @@ namespace Mugs.Services
 
             public override int Read()
             {
-                SpinnerService.Stop();
+                Stop();
                 return _originalReader.Read();
             }
 
             public override string ReadLine()
             {
-                SpinnerService.Stop();
+                Stop();
                 return _originalReader.ReadLine();
             }
         }
