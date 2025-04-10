@@ -45,6 +45,7 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `language <code>` - Change the interface language  
 * `logging` - Enable/disable console logging output  
 * `script <file>` - Execute commands from a file  
+* `spinner` - Enable/disable spinner animation  
 * `suggestions` - Enable/disable command hints  
 * `alias` - Manage command aliases  
 * `scan <file>` - Check a script for dangerous code  
