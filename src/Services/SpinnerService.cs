@@ -1,24 +1,27 @@
 ﻿// Mugs/Services/SpinnerService.cs
-
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.IO;
 using Mugs.Models;
-
-using System.Text;
 
 namespace Mugs.Services
 {
     public static class SpinnerService
     {
-        private static readonly char[] _spinnerSequence = new[] { '|', '/', '-', '\\' };
-        private static CancellationTokenSource _cts;
+        private static readonly char[] _spinnerSequence = { '|', '/', '-', '\\' };
+        private static volatile CancellationTokenSource _cts;
         private static Task _spinnerTask;
         private static int _spinnerPosition;
         private const int SpinnerDelayMs = 300;
         private static TextReader _originalInput;
-        private static TextWriter _originalOutput;
+        private static readonly object _lock = new object();
 
         public static void Start()
         {
-            if (AppSettings.EnableSpinnerAnimation)
+            if (!AppSettings.EnableSpinnerAnimation) return;
+
+            lock (_lock)
             {
                 Stop();
 
@@ -27,74 +30,70 @@ namespace Mugs.Services
                 _spinnerPosition = Console.CursorLeft;
 
                 _originalInput = Console.In;
-                _originalOutput = Console.Out;
+                Console.SetIn(new InputInterceptor(_originalInput));
 
-                Console.SetIn(new InputInterceptor(Console.In));
-                Console.SetOut(new OutputInterceptor(Console.Out));
-
+                var token = _cts.Token;
                 _spinnerTask = Task.Run(async () =>
                 {
                     try
                     {
-                        await Task.Delay(SpinnerDelayMs, _cts.Token);
-
-                        if (_cts.Token.IsCancellationRequested)
-                            return;
+                        await Task.Delay(SpinnerDelayMs, token);
+                        if (token.IsCancellationRequested) return;
 
                         var counter = 0;
-                        while (!_cts.Token.IsCancellationRequested)
+                        while (!token.IsCancellationRequested)
                         {
                             var spinChar = _spinnerSequence[counter++ % _spinnerSequence.Length];
                             UpdateSpinner(spinChar);
-                            await Task.Delay(100, _cts.Token);
+                            await Task.Delay(100, token);
                         }
                     }
-                    catch (TaskCanceledException)
-                    {
-
-                    }
-                }, _cts.Token);
+                    catch (OperationCanceledException) { }
+                }, token);
             }
         }
 
         public static void Stop()
         {
-            _cts?.Cancel();
-            _spinnerTask?.Wait();
-            _spinnerTask?.Dispose();
-            _spinnerTask = null;
-            _cts?.Dispose();
-            _cts = null;
-
-            if (_originalInput != null)
+            lock (_lock)
             {
-                Console.SetIn(_originalInput);
-                _originalInput = null;
-            }
+                try
+                {
+                    if (_cts != null)
+                    {
+                        _cts.Cancel();
+                        _cts.Dispose();
+                        _cts = null;
+                    }
 
-            if (_originalOutput != null)
-            {
-                Console.SetOut(_originalOutput);
-                _originalOutput = null;
-            }
+                    _spinnerTask?.Wait(50);
+                    _spinnerTask?.Dispose();
+                    _spinnerTask = null;
 
-            Console.CursorVisible = true;
+                    if (_originalInput != null)
+                    {
+                        Console.SetIn(_originalInput);
+                        _originalInput = null;
+                    }
+
+                    Console.CursorVisible = true;
+                }
+                catch { }
+            }
         }
 
         private static void UpdateSpinner(char spinChar)
         {
-            try
+            lock (_lock)
             {
-                var currentLeft = Console.CursorLeft;
-                var currentTop = Console.CursorTop;
-
-                Console.SetCursorPosition(_spinnerPosition, Console.CursorTop);
-                Console.Write(spinChar);
-                Console.SetCursorPosition(currentLeft, currentTop);
-            }
-            catch
-            {
-                
+                try
+                {
+                    var (left, top) = (Console.CursorLeft, Console.CursorTop);
+                    Console.SetCursorPosition(_spinnerPosition, top);
+                    Console.Write(spinChar);
+                    Console.SetCursorPosition(left, top);
+                }
+                catch { }
             }
         }
 
@@ -106,10 +105,7 @@ namespace Mugs.Services
 
         private class DisposableActivity : IDisposable
         {
-            public void Dispose()
-            {
-                Stop();
-            }
+            public void Dispose() => Stop();
         }
 
         private class InputInterceptor : TextReader
@@ -123,31 +119,14 @@ namespace Mugs.Services
 
             public override int Read()
             {
-                Stop();
+                SpinnerService.Stop();
                 return _originalReader.Read();
             }
 
             public override string ReadLine()
             {
-                Stop();
+                SpinnerService.Stop();
                 return _originalReader.ReadLine();
-            }
-        }
-
-        private class OutputInterceptor : TextWriter
-        {
-            private readonly TextWriter _originalWriter;
-
-            public OutputInterceptor(TextWriter originalWriter)
-            {
-                _originalWriter = originalWriter;
-            }
-
-            public override Encoding Encoding => _originalWriter.Encoding;
-
-            public override void Write(char value)
-            {
-                _originalWriter.Write(value);
             }
         }
     }
