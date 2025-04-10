@@ -293,6 +293,11 @@ namespace Mugs.Services
                 ["logging_disabled"] = "Console logging disabled",
                 ["logging_invalid_arg"] = "Invalid argument. Use 'on' or 'off'",
 
+                // Toggle spinner
+                ["toggle_spinner_description"] = "Toggles spinner animation during command execution",
+                ["spinner_enabled"] = "Spinner animation enabled",
+                ["spinner_disabled"] = "Spinner animation disabled",
+
                 // Settings
                 ["verified_load_error"] = "Error loading verified hashes: {0}",
                 ["settings_error"] = "Error saving settings: {0}"
@@ -491,6 +496,11 @@ namespace Mugs.Services
                 ["logging_enabled"] = "Вывод логов в консоль включен",
                 ["logging_disabled"] = "Вывод логов в консоль отключен",
                 ["logging_invalid_arg"] = "Неверный аргумент. Используйте 'on' или 'off'",
+
+                // Переключение спиннера
+                ["toggle_spinner_description"] = "Включает/выключает анимацию спиннера при выполнении команд",
+                ["spinner_enabled"] = "Анимация спиннера включена",
+                ["spinner_disabled"] = "Анимация спиннера выключена",
 
                 // Настройки
                 ["verified_load_error"] = "Ошибка загрузки проверенных хешей: {0}",
