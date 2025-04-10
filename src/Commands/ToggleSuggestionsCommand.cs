@@ -10,7 +10,7 @@ namespace Mugs.Commands
     {
         public string Name => "suggestions";
         public string Description => LocalizationService.GetString("toggle_suggestions");
-        public IEnumerable<string> Aliases => new[] { "ts" };
+        public IEnumerable<string> Aliases => new[] { "tsg" };
         public string Author => "System";
         public string Version => "1.0";
         public string? UsageExample => "toggle-suggestions";
