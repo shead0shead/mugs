@@ -298,6 +298,12 @@ namespace Mugs.Services
                 ["spinner_enabled"] = "Spinner animation enabled",
                 ["spinner_disabled"] = "Spinner animation disabled",
 
+                // Duplicates
+                ["command_conflict_header"] = "Command conflict in {0}:",
+                ["command_name_conflict"] = "Command name '{0}' is already registered",
+                ["command_alias_conflict"] = "Command alias '{0}' is already registered",
+                ["conflicting_command"] = "Conflicting command:",
+
                 // Settings
                 ["verified_load_error"] = "Error loading verified hashes: {0}",
                 ["settings_error"] = "Error saving settings: {0}"
@@ -501,6 +507,12 @@ namespace Mugs.Services
                 ["toggle_spinner_description"] = "Включает/выключает анимацию спиннера при выполнении команд",
                 ["spinner_enabled"] = "Анимация спиннера включена",
                 ["spinner_disabled"] = "Анимация спиннера выключена",
+
+                // Дубликаты
+                ["command_conflict_header"] = "Конфликт команд в {0}:",
+                ["command_name_conflict"] = "Имя команды '{0}' уже зарегистрировано",
+                ["command_alias_conflict"] = "Алиас команды '{0}' уже зарегистрирован",
+                ["conflicting_command"] = "Конфликтующая команда:",
 
                 // Настройки
                 ["verified_load_error"] = "Ошибка загрузки проверенных хешей: {0}",

@@ -82,21 +82,36 @@ namespace Mugs.Services
                     var commands = await CompileAndLoadCommandsAsync(file);
                     foreach (var command in commands)
                     {
-                        RegisterCommand(command);
-                        MetadataCacheService.UpdateCache(file, new CommandMetadata
+                        try
                         {
-                            Name = command.Name,
-                            Description = command.Description,
-                            Aliases = command.Aliases.ToArray(),
-                            Author = command.Author,
-                            Version = command.Version,
-                            FilePath = file
-                        });
+                            RegisterCommand(command);
+                            MetadataCacheService.UpdateCache(file, new CommandMetadata
+                            {
+                                Name = command.Name,
+                                Description = command.Description,
+                                Aliases = command.Aliases.ToArray(),
+                                Author = command.Author,
+                                Version = command.Version,
+                                FilePath = file
+                            });
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            var errorMessage = new StringBuilder()
+                                .AppendLine(LocalizationService.GetString("command_conflict_header", Path.GetFileName(file)))
+                                .AppendLine(ex.Message)
+                                .ToString()
+                                .TrimEnd();
+
+                            OutputService.WriteError(errorMessage);
+                            LoggerService.LogError(errorMessage);
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    OutputService.WriteError("Error loading command: {0}", ex.Message);
+                    OutputService.WriteError(ex.Message);
+                    LoggerService.LogError(ex.Message);
                 }
             }
 
@@ -419,8 +434,28 @@ namespace Mugs.Services
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
 
-            _commands[command.Name.ToLowerInvariant()] = command;
+            if (_commands.ContainsKey(command.Name.ToLowerInvariant()))
+            {
+                var errorBuilder = new StringBuilder();
+                errorBuilder.AppendLine($"{LocalizationService.GetString("command_name_conflict", command.Name)}");
+                errorBuilder.AppendLine($"{LocalizationService.GetString("conflicting_command")} {_commands[command.Name.ToLowerInvariant()].GetType().Name}");
 
+                throw new InvalidOperationException(errorBuilder.ToString());
+            }
+
+            foreach (var alias in command.Aliases ?? Enumerable.Empty<string>())
+            {
+                if (_commands.ContainsKey(alias.ToLowerInvariant()))
+                {
+                    var errorBuilder = new StringBuilder();
+                    errorBuilder.AppendLine($"{LocalizationService.GetString("command_alias_conflict", alias)}");
+                    errorBuilder.AppendLine($"{LocalizationService.GetString("conflicting_command")} {_commands[alias.ToLowerInvariant()].GetType().Name}");
+
+                    throw new InvalidOperationException(errorBuilder.ToString());
+                }
+            }
+
+            _commands[command.Name.ToLowerInvariant()] = command;
             foreach (var alias in command.Aliases ?? Enumerable.Empty<string>())
             {
                 _commands[alias.ToLowerInvariant()] = command;
