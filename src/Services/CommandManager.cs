@@ -18,6 +18,15 @@ namespace Mugs.Services
         private readonly Dictionary<string, ICommand> _commands = new();
         private readonly string _extensionsPath;
 
+        public readonly HashSet<string> _builtInCommands = new()
+        {
+            "help", "list", "reload", "clear", "restart",
+            "time", "update", "new", "debug", "enable",
+            "disable", "import", "language", "script",
+            "suggestions", "alias", "scan", "history",
+            "version", "logging"
+        };
+
         public CommandManager(string extensionsPath)
         {
             _extensionsPath = extensionsPath;
@@ -35,6 +44,12 @@ namespace Mugs.Services
                 RegisterBuiltInCommands();
                 await LoadExternalCommandsAsync();
                 LoggerService.LogInfo($"Loaded {_commands.Count} commands");
+
+                await SecurityScanService.CheckCommandsSafety(
+                    _commands.Values,
+                    _extensionsPath,
+                    _builtInCommands
+                );
             }
             catch (Exception ex)
             {
