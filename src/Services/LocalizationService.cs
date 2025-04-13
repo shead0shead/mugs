@@ -268,6 +268,7 @@ namespace Mugs.Services
                 ["scan_total_issues"] = "Total issues found: {0}",
                 ["scan_error"] = "Scan error: {0}",
                 ["full_path_display"] = "Full path: {0}",
+                ["scan_issues_found"] = "Potential security issues found in {0}:",
 
                 // History command
                 ["history_description"] = "Shows command history or searches in history",
@@ -478,6 +479,7 @@ namespace Mugs.Services
                 ["scan_total_issues"] = "Всего найдено проблем: {0}",
                 ["scan_error"] = "Ошибка проверки: {0}",
                 ["full_path_display"] = "Полный путь: {0}",
+                ["scan_issues_found"] = "Потенциальные проблемы безопасности, обнаруженны в {0}:",
 
                 // Команда history
                 ["history_description"] = "Показывает историю команд или выполняет поиск по ней",
