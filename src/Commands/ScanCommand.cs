@@ -10,24 +10,6 @@ namespace Mugs.Commands
 {
     public class ScanCommand : ICommand
     {
-        private static readonly HashSet<string> DangerousTypes = new()
-        {
-            "System.IO.File", "System.IO.Directory", "System.Diagnostics.Process",
-            "System.Net.WebClient", "System.Net.Http.HttpClient", "System.Reflection",
-            "System.Runtime.InteropServices", "System.Security", "System.Management",
-            "Microsoft.Win32", "System.Data.SqlClient", "System.Net.Sockets"
-        };
-
-        private static readonly HashSet<string> DangerousMethods = new()
-        {
-            "Delete", "Kill", "Start", "Execute", "Run", "Format",
-            "WriteAllText", "WriteAllBytes", "WriteAllLines",
-            "Remove", "Move", "Copy", "Create", "OpenWrite",
-            "DownloadFile", "UploadFile", "ExecuteNonQuery",
-            "ShellExecute", "CreateProcess", "Invoke",
-            "GetProcAddress", "LoadLibrary", "SetWindowsHook"
-        };
-
         private readonly string _extensionsPath;
 
         public ScanCommand(string extensionsPath)
@@ -51,7 +33,6 @@ namespace Mugs.Commands
             }
 
             var fileName = args[0];
-
             if (!fileName.EndsWith(".csx", StringComparison.OrdinalIgnoreCase))
             {
                 fileName += ".csx";
@@ -68,21 +49,15 @@ namespace Mugs.Commands
 
             try
             {
-                var code = await File.ReadAllTextAsync(fullPath);
-                var syntaxTree = CSharpSyntaxTree.ParseText(code);
-                var root = await syntaxTree.GetRootAsync();
-
-                var walker = new DangerousCodeWalker();
-                walker.Visit(root);
-
-                if (walker.DangerousCalls.Any())
+                var issues = await SecurityScanService.ScanFileForDangerousCode(fullPath);
+                if (issues.Any())
                 {
                     OutputService.WriteError("scan_issues_found", fileName);
-                    foreach (var call in walker.DangerousCalls.Distinct().OrderBy(c => c))
+                    foreach (var issue in issues)
                     {
-                        OutputService.WriteError($"- {call}");
+                        OutputService.WriteError($"- {issue}");
                     }
-                    OutputService.WriteResponse("scan_total_issues", walker.DangerousCalls.Count);
+                    OutputService.WriteResponse("scan_total_issues", issues.Count);
                 }
                 else
                 {
@@ -92,34 +67,6 @@ namespace Mugs.Commands
             catch (Exception ex)
             {
                 OutputService.WriteError("scan_error", ex.Message);
-            }
-        }
-
-        private class DangerousCodeWalker : CSharpSyntaxWalker
-        {
-            public List<string> DangerousCalls { get; } = new();
-
-            public override void VisitInvocationExpression(InvocationExpressionSyntax node)
-            {
-                var methodName = node.ToString();
-                if (DangerousMethods.Any(m => methodName.Contains(m)) ||
-                    DangerousTypes.Any(t => methodName.StartsWith(t)))
-                {
-                    DangerousCalls.Add(methodName);
-                }
-
-                base.VisitInvocationExpression(node);
-            }
-
-            public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
-            {
-                var typeName = node.Type.ToString();
-                if (DangerousTypes.Any(t => typeName.StartsWith(t)))
-                {
-                    DangerousCalls.Add($"new {typeName}()");
-                }
-
-                base.VisitObjectCreationExpression(node);
             }
         }
     }
