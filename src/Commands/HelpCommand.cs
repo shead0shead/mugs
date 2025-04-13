@@ -10,14 +10,6 @@ namespace Mugs.Commands
     public class HelpCommand : ICommand
     {
         private readonly CommandManager _manager;
-        private readonly HashSet<string> _builtInCommands = new()
-        {
-            "help", "list", "reload", "clear", "restart",
-            "time", "update", "new", "debug", "enable",
-            "disable", "import", "language", "script",
-            "suggestions", "alias", "scan", "history",
-            "version", "logging", "spinner"
-        };
 
         public HelpCommand(CommandManager manager) => _manager = manager;
         public string Name => "help";
@@ -94,13 +86,13 @@ namespace Mugs.Commands
                 .ToList();
 
             response.AppendLine(LocalizationService.GetString("builtin_commands"));
-            foreach (var cmd in allCommands.Where(c => _builtInCommands.Contains(c.Name)))
+            foreach (var cmd in allCommands.Where(c => _manager._builtInCommands.Contains(c.Name)))
             {
                 response.AppendLine(FormatCommandLine(cmd));
             }
 
             var verifiedCommands = new List<ICommand>();
-            foreach (var cmd in allCommands.Where(c => !_builtInCommands.Contains(c.Name)))
+            foreach (var cmd in allCommands.Where(c => !_manager._builtInCommands.Contains(c.Name)))
             {
                 var cmdFileName = $"{cmd.Name.ToLower()}.csx";
                 if (VerifiedExtensionsService.IsExtensionVerified(cmdFileName))
@@ -120,7 +112,7 @@ namespace Mugs.Commands
             }
 
             var externalCommands = allCommands
-                .Where(c => !_builtInCommands.Contains(c.Name) &&
+                .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
                        !verifiedCommands.Contains(c))
                 .ToList();
 
