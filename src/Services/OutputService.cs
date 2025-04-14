@@ -10,7 +10,7 @@ namespace Mugs.Services
             Write(messageKey, ConsoleColor.DarkGray, "Response", args);
 
         public static void WriteError(string messageKey, params object[] args) => 
-            Write(messageKey, ConsoleColor.DarkRed, "Error", args);
+            Write(messageKey, ConsoleColor.Red, "Error", args);
 
         public static void WriteWarning(string messageKey, params object[] args) => 
             Write(messageKey, ConsoleColor.DarkYellow, "Warning", args);
@@ -21,37 +21,8 @@ namespace Mugs.Services
         public static void WriteInfo(string messageKey, params object[] args) => 
             Write(messageKey, ConsoleColor.DarkCyan, "Info", args);
 
-        //public static void WriteError(string messageKey, params object[] args)
-        //{
-        //    var message = LocalizationService.GetString(messageKey, args);
-        //    var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-        //    LoggerService.LogError($"Error: {message}");
-
-        //    foreach (var line in lines)
-        //    {
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.Write($"{BorderChar} ");
-        //        Console.WriteLine(line);
-        //        Console.ResetColor();
-        //    }
-        //    Console.WriteLine();
-        //}
-
-        public static void WriteDebug(string message)
-        {
-            var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            LoggerService.LogDebug($"Debug: {message}");
-
-            foreach (var line in lines)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.Write($"{BorderChar} ");
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.Write("[DEBUG] ");
-                Console.ResetColor();
-                Console.WriteLine(line);
-            }
-        }
+        public static void WriteDebug(string message) =>
+            Write(message, ConsoleColor.Yellow, "Debug");
 
         public static void WriteLog(string message, ConsoleColor color)
         {
@@ -71,14 +42,31 @@ namespace Mugs.Services
         {
             var message = LocalizationService.GetString(messageKey, args);
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            LoggerService.LogInfo($"{logPrefix}: {message}");
+
+            switch (logPrefix)
+            {
+                case "Error":
+                    LoggerService.LogError($"Error: {message}");
+                    break;
+                case "Warning":
+                    LoggerService.LogWarning($"Warning: {message}");
+                    break;
+                case "Debug":
+                    LoggerService.LogDebug($"Debug: {message}");
+                    break;
+                default:
+                    LoggerService.LogInfo($"{logPrefix}: {message}");
+                    break;
+            }
 
             foreach (var line in lines)
             {
                 Console.ForegroundColor = borderColor;
                 Console.Write($"{BorderChar} ");
-                Console.ResetColor();
+                if (logPrefix == "Debug") Console.Write("[DEBUG] ");
+                if (logPrefix != "Error") Console.ResetColor();
                 Console.WriteLine(line);
+                Console.ResetColor();
             }
             Console.WriteLine();
         }
