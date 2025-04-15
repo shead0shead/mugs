@@ -36,6 +36,7 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `list` - List all available commands  
 * `reload` - Reload all commands  
 * `clear` - Clear the console  
+* `color` - Manage output colors  
 * `restart` - Fully restart the application  
 * `time` - Show the current time  
 * `update` - Check for and install updates  
