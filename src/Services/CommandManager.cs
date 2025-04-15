@@ -24,7 +24,7 @@ namespace Mugs.Services
             "time", "update", "new", "debug", "enable",
             "disable", "import", "language", "script",
             "suggestions", "alias", "scan", "history",
-            "version", "logging", "spinner"
+            "version", "logging", "spinner", "color"
         };
 
         public CommandManager(string extensionsPath)
@@ -81,6 +81,7 @@ namespace Mugs.Services
             RegisterCommand(new VersionCommand(this));
             RegisterCommand(new LoggingCommand());
             RegisterCommand(new ToggleSpinnerCommand());
+            RegisterCommand(new ColorCommand());
         }
 
         private async Task LoadExternalCommandsAsync()
