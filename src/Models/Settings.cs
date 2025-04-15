@@ -20,6 +20,12 @@ namespace Mugs.Models
             public int AutoUpdateInterval { get; set; } = 24;
             public DateTime LastUpdateCheck { get; set; } = DateTime.MinValue;
             public bool EnableSpinnerAnimation { get; set; } = true;
+            public ConsoleColor ResponseColor { get; set; } = ConsoleColor.DarkGray;
+            public ConsoleColor ErrorColor { get; set; } = ConsoleColor.Red;
+            public ConsoleColor WarningColor { get; set; } = ConsoleColor.DarkYellow;
+            public ConsoleColor SuccessColor { get; set; } = ConsoleColor.DarkGreen;
+            public ConsoleColor InfoColor { get; set; } = ConsoleColor.DarkCyan;
+            public ConsoleColor DebugColor { get; set; } = ConsoleColor.Yellow;
         }
 
         public static void Initialize()
@@ -109,6 +115,66 @@ namespace Mugs.Models
             set
             {
                 _currentSettings.EnableSpinnerAnimation = value;
+                SaveSettings();
+            }
+        }
+
+        public static ConsoleColor ResponseColor
+        {
+            get => _currentSettings.ResponseColor;
+            set
+            {
+                _currentSettings.ResponseColor = value;
+                SaveSettings();
+            }
+        }
+
+        public static ConsoleColor ErrorColor
+        {
+            get => _currentSettings.ErrorColor;
+            set
+            {
+                _currentSettings.ErrorColor = value;
+                SaveSettings();
+            }
+        }
+
+        public static ConsoleColor WarningColor
+        {
+            get => _currentSettings.WarningColor;
+            set
+            {
+                _currentSettings.WarningColor = value;
+                SaveSettings();
+            }
+        }
+
+        public static ConsoleColor SuccessColor
+        {
+            get => _currentSettings.SuccessColor;
+            set
+            {
+                _currentSettings.SuccessColor = value;
+                SaveSettings();
+            }
+        }
+
+        public static ConsoleColor InfoColor
+        {
+            get => _currentSettings.InfoColor;
+            set
+            {
+                _currentSettings.InfoColor = value;
+                SaveSettings();
+            }
+        }
+
+        public static ConsoleColor DebugColor
+        {
+            get => _currentSettings.DebugColor;
+            set
+            {
+                _currentSettings.DebugColor = value;
                 SaveSettings();
             }
         }
