@@ -299,6 +299,21 @@ namespace Mugs.Services
                 ["spinner_enabled"] = "Spinner animation enabled",
                 ["spinner_disabled"] = "Spinner animation disabled",
 
+                // Color command
+                ["color_description"] = "Manage output colors configuration",
+                ["color_available_settings"] = "Available color settings:",
+                ["color_invalid_command"] = "Invalid color command. Use: set|get|list",
+                ["color_invalid_type"] = "Unknown color type: {0}",
+                ["color_invalid_name"] = "Invalid color name: {0}",
+                ["color_available_colors"] = "Available colors: {0}",
+                ["color_current_value"] = "{0} color: {1}",
+                ["color_changed"] = "Changed {0} color to {1}",
+                ["color_type_response"] = "Response",
+                ["color_type_error"] = "Error",
+                ["color_type_warning"] = "Warning",
+                ["color_type_success"] = "Success",
+                ["color_type_info"] = "Info",
+                ["color_type_debug"] = "Debug",
                 // Duplicates
                 ["command_conflict_header"] = "Command conflict in {0}:",
                 ["command_name_conflict"] = "Command name '{0}' is already registered",
@@ -510,6 +525,21 @@ namespace Mugs.Services
                 ["spinner_enabled"] = "Анимация спиннера включена",
                 ["spinner_disabled"] = "Анимация спиннера выключена",
 
+                // Команда color
+                ["color_description"] = "Управление цветами вывода",
+                ["color_available_settings"] = "Доступные настройки цветов:",
+                ["color_invalid_command"] = "Неверная команда. Используйте: set|get|list",
+                ["color_invalid_type"] = "Неизвестный тип цвета: {0}",
+                ["color_invalid_name"] = "Неверное название цвета: {0}",
+                ["color_available_colors"] = "Доступные цвета: {0}",
+                ["color_current_value"] = "Цвет {0}: {1}",
+                ["color_changed"] = "Цвет {0} изменен на {1}",
+                ["color_type_response"] = "Response",
+                ["color_type_error"] = "Error",
+                ["color_type_warning"] = "Warning",
+                ["color_type_success"] = "Success",
+                ["color_type_info"] = "Info",
+                ["color_type_debug"] = "Debug",
                 // Дубликаты
                 ["command_conflict_header"] = "Конфликт команд в {0}:",
                 ["command_name_conflict"] = "Имя команды '{0}' уже зарегистрировано",
