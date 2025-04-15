@@ -7,22 +7,22 @@ namespace Mugs.Services
         private const char BorderChar = '▌';
 
         public static void WriteResponse(string messageKey, params object[] args) => 
-            Write(messageKey, ConsoleColor.DarkGray, "Response", args);
+            Write(messageKey, AppSettings.ResponseColor, "Response", args);
 
         public static void WriteError(string messageKey, params object[] args) => 
-            Write(messageKey, ConsoleColor.Red, "Error", args);
+            Write(messageKey, AppSettings.ErrorColor, "Error", args);
 
         public static void WriteWarning(string messageKey, params object[] args) => 
-            Write(messageKey, ConsoleColor.DarkYellow, "Warning", args);
+            Write(messageKey, AppSettings.WarningColor, "Warning", args);
 
         public static void WriteSuccess(string messageKey, params object[] args) => 
-            Write(messageKey, ConsoleColor.DarkGreen, "Success", args);
+            Write(messageKey, AppSettings.SuccessColor, "Success", args);
 
         public static void WriteInfo(string messageKey, params object[] args) => 
-            Write(messageKey, ConsoleColor.DarkCyan, "Info", args);
+            Write(messageKey, AppSettings.InfoColor, "Info", args);
 
         public static void WriteDebug(string message) =>
-            Write(message, ConsoleColor.Yellow, "Debug");
+            Write(message, AppSettings.DebugColor, "Debug");
 
         public static void WriteLog(string message, ConsoleColor color)
         {
