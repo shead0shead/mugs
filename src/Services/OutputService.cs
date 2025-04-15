@@ -1,5 +1,7 @@
 ﻿// Mugs/Services/OutputService.cs
 
+using Mugs.Models;
+
 namespace Mugs.Services
 {
     public static class OutputService
