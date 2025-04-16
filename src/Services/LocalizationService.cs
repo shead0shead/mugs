@@ -125,6 +125,9 @@ namespace Mugs.Services
                 ["help_command"] = "help",
                 ["help_description"] = "Shows command help",
                 ["help_usage"] = "help update, help new",
+                ["details_title"] = "{0} Command Details",
+                ["property"] = "Property",
+                ["value"] = "Value",
 
                 // Language command
                 ["language_description"] = "Sets or shows the current language",
@@ -351,6 +354,9 @@ namespace Mugs.Services
                 ["help_command"] = "help",
                 ["help_description"] = "Показывает справку по командам",
                 ["help_usage"] = "help update, help new",
+                ["details_title"] = "Подробности о команде {0}",
+                ["property"] = "Свойство",
+                ["value"] = "Значение",
 
                 // Команда language
                 ["language_description"] = "Устанавливает или показывает текущий язык",
