@@ -21,21 +21,38 @@ namespace Mugs.Commands
 
         public async Task ExecuteAsync(string[] args)
         {
-            if (args.Length > 0)
+            bool useTable = args.Length > 0 && args.Contains("--table");
+            var commandArgs = args.Where(a => a != "--table").ToArray();
+
+            if (commandArgs.Length > 0)
             {
-                var commandName = args[0].ToLowerInvariant();
+                var commandName = commandArgs[0].ToLowerInvariant();
                 var command = _manager.GetCommand(commandName);
 
                 if (command != null)
                 {
-                    await ShowCommandDetails(command);
+                    if (useTable)
+                    {
+                        await ShowCommandDetailsAsTable(command);
+                    }
+                    else
+                    {
+                        await ShowCommandDetails(command);
+                    }
                     return;
                 }
 
                 OutputService.WriteError("command_not_found", commandName);
             }
 
-            await ShowAllCommands();
+            if (useTable)
+            {
+                await ShowAllCommandsAsTable();
+            }
+            else
+            {
+                await ShowAllCommands();
+            }
         }
 
         private async Task ShowCommandDetails(ICommand command)
@@ -73,6 +90,67 @@ namespace Mugs.Commands
 
             OutputService.WriteResponse(response.ToString().TrimEnd());
         }
+
+        private async Task ShowCommandDetailsAsTable(ICommand command)
+        {
+            var fileName = $"{command.Name.ToLower()}.csx";
+            var isVerified = VerifiedExtensionsService.IsExtensionVerified(fileName);
+
+            var rows = new List<List<string>>();
+
+            rows.Add(new List<string> {
+                LocalizationService.GetString("command"),
+                command.Name
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("description"),
+                command.Description
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("author"),
+                command.Author
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("version"),
+                command.Version
+            });
+            
+            rows.Add(new List<string> {
+                LocalizationService.GetString("aliases"),
+                command.Aliases.Any() ? string.Join(", ", command.Aliases) : "-"
+            });
+
+            rows.Add(new List<string> {
+                LocalizationService.GetString("verification"),
+                isVerified ? "✅ " + LocalizationService.GetString("verified_safe") : "-"
+            });
+
+            if (!string.IsNullOrEmpty(command.UsageExample))
+            {
+                var examples = command.UsageExample.Split('\n');
+                for (int i = 0; i < examples.Length; i++)
+                {
+                    rows.Add(new List<string> {
+                        i == 0 ? LocalizationService.GetString("usage_examples") : "",
+                        examples[i].Trim()
+                    });
+                }
+            }
+
+            var commandName = char.ToUpper(command.Name[0]) + command.Name.Substring(1);
+            OutputService.WriteTableColumnsHighlight(
+                LocalizationService.GetString("details_title", commandName),
+                new List<IEnumerable<string>> {
+                    rows.Select(r => r[0]),
+                    rows.Select(r => r[1])
+                },
+                new List<string> {
+                    LocalizationService.GetString("property"),
+                    LocalizationService.GetString("value")
+                }
+            );
+        }
+
 
         private async Task ShowAllCommands()
         {
@@ -138,6 +216,83 @@ namespace Mugs.Commands
                 : "";
 
             return $"  {cmd.Name,-12}{aliases,-15} - {cmd.Description}";
+        }
+
+        private async Task ShowAllCommandsAsTable()
+        {
+            await VerifiedExtensionsService.EnsureHashesLoadedAsync();
+            var allCommands = _manager.GetAllCommands()
+                .GroupBy(c => c.Name)
+                .Select(g => g.First())
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            var builtIn = allCommands
+                .Where(c => _manager._builtInCommands.Contains(c.Name))
+                .ToList();
+
+            if (builtIn.Any())
+            {
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("builtin_commands"),
+                    new List<IEnumerable<string>> {
+                        builtIn.Select(c => c.Name),
+                        builtIn.Select(c => c.Description),
+                        builtIn.Select(c => string.Join(", ", c.Aliases))
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("description"),
+                        LocalizationService.GetString("aliases")
+                    }
+                );
+            }
+
+            var verified = allCommands
+                .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
+                           VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx"))
+                .ToList();
+
+            if (verified.Any())
+            {
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("verified_commands"),
+                    new List<IEnumerable<string>> {
+                        verified.Select(c => c.Name),
+                        verified.Select(c => c.Description),
+                        verified.Select(c => string.Join(", ", c.Aliases)),
+                        verified.Select(c => "✅")
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("description"),
+                        LocalizationService.GetString("aliases"),
+                        LocalizationService.GetString("verification")
+                    }
+                );
+            }
+
+            var external = allCommands
+                .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
+                           !VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx"))
+                .ToList();
+
+            if (external.Any())
+            {
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("external_commands"),
+                    new List<IEnumerable<string>> {
+                        external.Select(c => c.Name),
+                        external.Select(c => c.Description),
+                        external.Select(c => string.Join(", ", c.Aliases))
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("description"),
+                        LocalizationService.GetString("aliases")
+                    }
+                );
+            }
         }
     }
 }
