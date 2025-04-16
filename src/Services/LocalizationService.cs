@@ -289,6 +289,7 @@ namespace Mugs.Services
                 ["extensions"] = "Extensions",
                 ["available"] = "available",
                 ["loaded"] = "loaded",
+                ["version_table_title"] = "Version Information",
 
                 // Logging command
                 ["logging_description"] = "Enables or disables console logging output",
@@ -518,6 +519,7 @@ namespace Mugs.Services
                 ["extensions"] = "Расширения",
                 ["available"] = "доступно",
                 ["loaded"] = "загружено",
+                ["version_table_title"] = "Информация о версии",
 
                 // Команда logging
                 ["logging_description"] = "Включает или отключает вывод логов в консоль",
