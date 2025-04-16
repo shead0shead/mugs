@@ -27,8 +27,22 @@ namespace Mugs.Commands
 
         public async Task ExecuteAsync(string[] args)
         {
+            bool useTable = args.Length > 0 && args.Contains("--table");
+
             await VerifiedExtensionsService.EnsureHashesLoadedAsync();
 
+            if (useTable)
+            {
+                await ShowCommandsAsTable();
+            }
+            else
+            {
+                await ShowCommandsAsList();
+            }
+        }
+
+        private async Task ShowCommandsAsList()
+        {
             var response = new StringBuilder();
             response.AppendLine(LocalizationService.GetString("available_commands"));
 
@@ -69,6 +83,108 @@ namespace Mugs.Commands
             }
 
             OutputService.WriteResponse(response.ToString().TrimEnd());
+        }
+
+        private async Task ShowCommandsAsTable()
+        {
+            var allCommands = _manager.GetAllCommands()
+                .GroupBy(c => c.Name)
+                .Select(g => g.First())
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            var builtIn = allCommands
+                .Where(c => _manager._builtInCommands.Contains(c.Name))
+                .ToList();
+
+            if (builtIn.Any())
+            {
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("builtin_commands"),
+                    new List<IEnumerable<string>> {
+                        builtIn.Select(c => c.Name),
+                        builtIn.Select(c => c.Description),
+                        builtIn.Select(c => string.Join(", ", c.Aliases))
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("description"),
+                        LocalizationService.GetString("aliases")
+                    }
+                );
+            }
+
+            var verified = allCommands
+                .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
+                           VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx"))
+                .ToList();
+
+            if (verified.Any())
+            {
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("verified_commands"),
+                    new List<IEnumerable<string>> {
+                        verified.Select(c => c.Name),
+                        verified.Select(c => c.Description),
+                        verified.Select(c => string.Join(", ", c.Aliases)),
+                        verified.Select(c => "✅")
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("description"),
+                        LocalizationService.GetString("aliases"),
+                        LocalizationService.GetString("verification")
+                    }
+                );
+            }
+
+            var external = allCommands
+                .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
+                           !VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx"))
+                .ToList();
+
+            if (external.Any())
+            {
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("external_commands"),
+                    new List<IEnumerable<string>> {
+                        external.Select(c => c.Name),
+                        external.Select(c => c.Description),
+                        external.Select(c => string.Join(", ", c.Aliases))
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("description"),
+                        LocalizationService.GetString("aliases")
+                    }
+                );
+            }
+
+            var disabledFiles = Directory.GetFiles(_extensionsPath, "*.csx.disable");
+            if (disabledFiles.Any())
+            {
+                var disabledCommands = disabledFiles
+                    .Select(f => Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(f)))
+                    .ToList();
+
+                var verifiedStatus = disabledCommands
+                    .Select(c => VerifiedExtensionsService.IsExtensionVerified($"{c}.csx") ? "✅" : "")
+                    .ToList();
+
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("disabled_extensions"),
+                    new List<IEnumerable<string>> {
+                        disabledCommands,
+                        verifiedStatus
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("verification")
+                    }
+                );
+
+                OutputService.WriteResponse(LocalizationService.GetString("enable_usage"));
+            }
         }
     }
 }
