@@ -23,7 +23,21 @@ namespace Mugs.Commands
         public string Version => "1.0";
         public string? UsageExample => "version";
 
-        public Task ExecuteAsync(string[] args)
+        public async Task ExecuteAsync(string[] args)
+        {
+            bool useTable = args.Length > 0 && args.Contains("--table");
+
+            if (useTable)
+            {
+                await ShowVersionAsTable();
+            }
+            else
+            {
+                await ShowVersionAsDefault();
+            }
+        }
+        
+        private async Task ShowVersionAsDefault()
         {
             var asciiArt = new[]
 {
@@ -62,7 +76,53 @@ namespace Mugs.Commands
             }
 
             OutputService.WriteResponse(output.ToString().TrimEnd());
-            return Task.CompletedTask;
+        }
+
+        private async Task ShowVersionAsTable()
+        {
+            var extensionsPath = Path.Combine(AppContext.BaseDirectory, "Extensions");
+            var extensionsCount = Directory.Exists(extensionsPath)
+                ? Directory.GetFiles(extensionsPath, "*.csx").Length
+                : 0;
+
+            var rows = new List<List<string>>();
+
+            rows.Add(new List<string> {
+                LocalizationService.GetString("application"),
+                "Mugs Console Add-on Platform"
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("version"),
+                $"{UpdateCheckerService.CurrentVersion}"
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("author"),
+                "Shead (https://github.com/shead0shead)"
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("repo"),
+                "https://github.com/shead0shead/mugs"
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("commands"),
+                $"{_manager.GetAllCommands().Count()} {LocalizationService.GetString("available")}"
+            });
+            rows.Add(new List<string> {
+                LocalizationService.GetString("extensions"),
+                $"{extensionsCount} {LocalizationService.GetString("loaded")}"
+            });
+
+            OutputService.WriteTableColumnsHighlight(
+                LocalizationService.GetString("version_table_title"),
+                new List<IEnumerable<string>> {
+                    rows.Select(r => r[0]),
+                    rows.Select(r => r[1])
+                },
+                new List<string> {
+                    LocalizationService.GetString("property"),
+                    LocalizationService.GetString("value")
+                }
+            );
         }
     }
 }
