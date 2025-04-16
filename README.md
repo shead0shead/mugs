@@ -32,8 +32,8 @@ After launching, you will see a welcome message. Type `help` to view the list of
 
 ## Basic Commands
 
-* `help` - Show command help  
-* `list` - List all available commands  
+* `help` - Show command help (use `--table` for tabular output)  
+* `list` - List all available commands (use `--table` for tabular output)  
 * `reload` - Reload all commands  
 * `clear` - Clear the console  
 * `color` - Manage output colors  
@@ -51,8 +51,17 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `alias` - Manage command aliases  
 * `scan <file>` - Check a script for dangerous code  
 * `history` - Show command history  
-* `version` - Show the application version  
+* `version` - Show the application version (use `--table` for tabular output)  
 * `debug <command>` - Run a command in debug mode  
+
+### Tabular Output
+For better readability, both `help`, `list` and `version` commands support tabular output format:
+
+```bash
+help --table         # Show all commands in a formatted table
+list --table         # List commands with details in table view
+help update --table  # Show detailed help for specific command in table format
+```
 
 ## Creating Custom Commands
 
