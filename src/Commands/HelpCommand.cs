@@ -2,6 +2,7 @@
 
 using Mugs.Services;
 using Mugs.Interfaces;
+using Mugs.Models;
 
 using System.Text;
 
@@ -31,7 +32,7 @@ namespace Mugs.Commands
 
                 if (command != null)
                 {
-                    if (useTable)
+                    if (useTable || AppSettings.AlwaysUseTabularView)
                     {
                         await ShowCommandDetailsAsTable(command);
                     }
@@ -45,7 +46,7 @@ namespace Mugs.Commands
                 OutputService.WriteError("command_not_found", commandName);
             }
 
-            if (useTable)
+            if (useTable || AppSettings.AlwaysUseTabularView)
             {
                 await ShowAllCommandsAsTable();
             }
