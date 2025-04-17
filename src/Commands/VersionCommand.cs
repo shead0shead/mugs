@@ -2,6 +2,7 @@
 
 using Mugs.Services;
 using Mugs.Interfaces;
+using Mugs.Models;
 
 using System.Text;
 
@@ -27,7 +28,7 @@ namespace Mugs.Commands
         {
             bool useTable = args.Length > 0 && args.Contains("--table");
 
-            if (useTable)
+            if (useTable || AppSettings.AlwaysUseTabularView)
             {
                 await ShowVersionAsTable();
             }
