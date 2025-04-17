@@ -318,6 +318,16 @@ namespace Mugs.Services
                 ["color_type_success"] = "Success",
                 ["color_type_info"] = "Info",
                 ["color_type_debug"] = "Debug",
+
+                // Tabular command
+                ["tabular_description"] = "Toggles always use tabular view mode for command outputs",
+                ["tabular_current_mode"] = "Current tabular view mode: {0}",
+                ["tabular_mode_enabled"] = "Tabular view mode enabled",
+                ["tabular_mode_disabled"] = "Tabular view mode disabled",
+                ["tabular_invalid_mode"] = "Invalid mode. Use: on|off|toggle",
+                ["enabled"] = "ENABLED",
+                ["disabled"] = "DISABLED",
+
                 // Duplicates
                 ["command_conflict_header"] = "Command conflict in {0}:",
                 ["command_name_conflict"] = "Command name '{0}' is already registered",
@@ -548,6 +558,16 @@ namespace Mugs.Services
                 ["color_type_success"] = "Success",
                 ["color_type_info"] = "Info",
                 ["color_type_debug"] = "Debug",
+
+                // Команда tabular
+                ["tabular_description"] = "Переключает режим постоянного использования табличного вывода для команд",
+                ["tabular_current_mode"] = "Текущий режим табличного вывода: {0}",
+                ["tabular_mode_enabled"] = "Режим табличного вывода включен",
+                ["tabular_mode_disabled"] = "Режим табличного вывода выключен",
+                ["tabular_invalid_mode"] = "Неверный режим. Используйте: on|off|toggle",
+                ["enabled"] = "ВКЛЮЧЕН",
+                ["disabled"] = "ВЫКЛЮЧЕН",
+
                 // Дубликаты
                 ["command_conflict_header"] = "Конфликт команд в {0}:",
                 ["command_name_conflict"] = "Имя команды '{0}' уже зарегистрировано",
