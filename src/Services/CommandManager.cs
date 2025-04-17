@@ -82,6 +82,7 @@ namespace Mugs.Services
             RegisterCommand(new LoggingCommand());
             RegisterCommand(new ToggleSpinnerCommand());
             RegisterCommand(new ColorCommand());
+            RegisterCommand(new ToggleTableViewCommand());
         }
 
         private async Task LoadExternalCommandsAsync()
