@@ -38,6 +38,7 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `clear` - Clear the console  
 * `color` - Manage output colors  
 * `restart` - Fully restart the application  
+* `tabular` - Enable/disable tabular view mode for outputs   
 * `time` - Show the current time  
 * `update` - Check for and install updates  
 * `new <name>` - Create a template for a new command  
@@ -54,13 +55,22 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `version` - Show the application version (use `--table` for tabular output)  
 * `debug <command>` - Run a command in debug mode  
 
-### Tabular Output
+### Tabular View
 For better readability, both `help`, `list` and `version` commands support tabular output format:
 
 ```bash
 help --table         # Show all commands in a formatted table
 list --table         # List commands with details in table view
 help update --table  # Show detailed help for specific command in table format
+```
+
+Toggle or configure table view with the `tabular` command:
+
+```bash
+tabular          # Show current mode
+tabular on       # Always use tables
+tabular off      # Use default list view  
+tabular toggle   # Switch between modes
 ```
 
 ## Creating Custom Commands
