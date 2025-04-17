@@ -2,6 +2,7 @@
 
 using Mugs.Services;
 using Mugs.Interfaces;
+using Mugs.Models;
 
 using System.Text;
 
@@ -31,7 +32,7 @@ namespace Mugs.Commands
 
             await VerifiedExtensionsService.EnsureHashesLoadedAsync();
 
-            if (useTable)
+            if (useTable || AppSettings.AlwaysUseTabularView)
             {
                 await ShowCommandsAsTable();
             }
