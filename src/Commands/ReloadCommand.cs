@@ -1,15 +1,15 @@
-﻿// Mugs/Commands/ReloadCommandsCommand.cs
+﻿// Mugs/Commands/ReloadCommand.cs
 
 using Mugs.Services;
 using Mugs.Interfaces;
 
 namespace Mugs.Commands
 {
-    public class ReloadCommandsCommand : ICommand
+    public class ReloadCommand : ICommand
     {
         private readonly CommandManager _manager;
 
-        public ReloadCommandsCommand(CommandManager manager) => _manager = manager;
+        public ReloadCommand(CommandManager manager) => _manager = manager;
         public string Name => "reload";
         public string Description => LocalizationService.GetString("reload_description");
         public IEnumerable<string> Aliases => Enumerable.Empty<string>();
