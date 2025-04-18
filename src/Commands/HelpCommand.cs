@@ -164,8 +164,15 @@ namespace Mugs.Commands
                 .OrderBy(c => c.Name)
                 .ToList();
 
-            response.AppendLine(LocalizationService.GetString("builtin_commands"));
-            foreach (var cmd in allCommands.Where(c => _manager._builtInCommands.Contains(c.Name)))
+            response.AppendLine(LocalizationService.GetString("system_commands"));
+            foreach (var cmd in allCommands.Where(c => _manager._systemCommands.Contains(c.Name)))
+            {
+                response.AppendLine(FormatCommandLine(cmd));
+            }
+
+            response.AppendLine();
+            response.AppendLine(LocalizationService.GetString("settings_commands"));
+            foreach (var cmd in allCommands.Where(c => _manager._settingsCommands.Contains(c.Name)))
             {
                 response.AppendLine(FormatCommandLine(cmd));
             }
@@ -228,18 +235,39 @@ namespace Mugs.Commands
                 .OrderBy(c => c.Name)
                 .ToList();
 
-            var builtIn = allCommands
-                .Where(c => _manager._builtInCommands.Contains(c.Name))
+            var system = allCommands
+                .Where(c => _manager._systemCommands.Contains(c.Name))
                 .ToList();
 
-            if (builtIn.Any())
+            if (system.Any())
             {
                 OutputService.WriteTableColumnsHighlight(
-                    LocalizationService.GetString("builtin_commands"),
+                    LocalizationService.GetString("system_commands"),
                     new List<IEnumerable<string>> {
-                        builtIn.Select(c => c.Name),
-                        builtIn.Select(c => c.Description),
-                        builtIn.Select(c => string.Join(", ", c.Aliases))
+                        system.Select(c => c.Name),
+                        system.Select(c => c.Description),
+                        system.Select(c => string.Join(", ", c.Aliases))
+                    },
+                    new List<string> {
+                        LocalizationService.GetString("command"),
+                        LocalizationService.GetString("description"),
+                        LocalizationService.GetString("aliases")
+                    }
+                );
+            }
+
+            var settings = allCommands
+                .Where(c => _manager._settingsCommands.Contains(c.Name))
+                .ToList();
+
+            if (settings.Any())
+            {
+                OutputService.WriteTableColumnsHighlight(
+                    LocalizationService.GetString("settings_commands"),
+                    new List<IEnumerable<string>> {
+                        settings.Select(c => c.Name),
+                        settings.Select(c => c.Description),
+                        settings.Select(c => string.Join(", ", c.Aliases))
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
