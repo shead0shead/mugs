@@ -1,4 +1,4 @@
-﻿// Mugs/Commands/ListCommandsCommand.cs
+﻿// Mugs/Commands/ListCommand.cs
 
 using Mugs.Services;
 using Mugs.Interfaces;
@@ -8,12 +8,12 @@ using System.Text;
 
 namespace Mugs.Commands
 {
-    public class ListCommandsCommand : ICommand
+    public class ListCommand : ICommand
     {
         private readonly CommandManager _manager;
         private readonly string _extensionsPath;
 
-        public ListCommandsCommand(CommandManager manager, string extensionsPath)
+        public ListCommand(CommandManager manager, string extensionsPath)
         {
             _manager = manager;
             _extensionsPath = extensionsPath;
@@ -105,7 +105,7 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         builtIn.Select(c => c.Name),
                         builtIn.Select(c => c.Description),
-                        builtIn.Select(c => string.Join(", ", c.Aliases))
+                        builtIn.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-")
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
@@ -127,8 +127,9 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         verified.Select(c => c.Name),
                         verified.Select(c => c.Description),
-                        verified.Select(c => string.Join(", ", c.Aliases)),
+                        verified.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-"),
                         verified.Select(c => c.Author),
+                        verified.Select(c => c.Version),
                         verified.Select(c => "✅")
                     },
                     new List<string> {
@@ -136,6 +137,7 @@ namespace Mugs.Commands
                         LocalizationService.GetString("description"),
                         LocalizationService.GetString("aliases"),
                         LocalizationService.GetString("author"),
+                        LocalizationService.GetString("version"),
                         LocalizationService.GetString("verification")
                     }
                 );
@@ -153,14 +155,16 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         external.Select(c => c.Name),
                         external.Select(c => c.Description),
-                        external.Select(c => string.Join(", ", c.Aliases)),
-                        external.Select(c => c.Author)
+                        external.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-"),
+                        external.Select(c => c.Author),
+                        external.Select(c => c.Version)
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
                         LocalizationService.GetString("description"),
                         LocalizationService.GetString("aliases"),
-                        LocalizationService.GetString("author")
+                        LocalizationService.GetString("author"),
+                        LocalizationService.GetString("version")
                     }
                 );
             }
@@ -173,7 +177,7 @@ namespace Mugs.Commands
                     .ToList();
 
                 var verifiedStatus = disabledCommands
-                    .Select(c => VerifiedExtensionsService.IsExtensionVerified($"{c}.csx") ? "✅" : "")
+                    .Select(c => VerifiedExtensionsService.IsExtensionVerified($"{c}.csx") ? "✅" : "-")
                     .ToList();
 
                 OutputService.WriteTableColumnsHighlight(
