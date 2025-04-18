@@ -42,6 +42,11 @@ namespace Mugs.Services
             "color", "tabular"
         };
 
+        public readonly HashSet<string> _ignoredCommands = new()
+        {
+            null
+        };
+
         public CommandManager(string extensionsPath)
         {
             _extensionsPath = extensionsPath;
