@@ -128,12 +128,14 @@ namespace Mugs.Commands
                         verified.Select(c => c.Name),
                         verified.Select(c => c.Description),
                         verified.Select(c => string.Join(", ", c.Aliases)),
+                        verified.Select(c => c.Author),
                         verified.Select(c => "✅")
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
                         LocalizationService.GetString("description"),
                         LocalizationService.GetString("aliases"),
+                        LocalizationService.GetString("author"),
                         LocalizationService.GetString("verification")
                     }
                 );
@@ -151,12 +153,14 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         external.Select(c => c.Name),
                         external.Select(c => c.Description),
-                        external.Select(c => string.Join(", ", c.Aliases))
+                        external.Select(c => string.Join(", ", c.Aliases)),
+                        external.Select(c => c.Author)
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
                         LocalizationService.GetString("description"),
-                        LocalizationService.GetString("aliases")
+                        LocalizationService.GetString("aliases"),
+                        LocalizationService.GetString("author")
                     }
                 );
             }
