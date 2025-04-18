@@ -119,6 +119,8 @@ namespace Mugs.Services
 
                 // Help command
                 ["builtin_commands"] = "Built-in commands:",
+                ["system_commands"] = "System commands:",
+                ["settings_commands"] = "Settings commands:",
                 ["verified_commands"] = "Verified commands (✅ safe):",
                 ["external_commands"] = "Third-party commands (use with caution):",
                 ["command_help"] = "For detailed help type: help <command>",
@@ -359,6 +361,8 @@ namespace Mugs.Services
 
                 // Команда help
                 ["builtin_commands"] = "Встроенные команды:",
+                ["system_commands"] = "Системные команды:",
+                ["settings_commands"] = "Конфигурационные команды:",
                 ["verified_commands"] = "Проверенные команды (✅ безопасные):",
                 ["external_commands"] = "Сторонние команды (используйте с осторожностью):",
                 ["command_help"] = "Для подробной справки введите: help <команда>",
