@@ -165,20 +165,20 @@ namespace Mugs.Commands
                 .ToList();
 
             response.AppendLine(LocalizationService.GetString("system_commands"));
-            foreach (var cmd in allCommands.Where(c => _manager._systemCommands.Contains(c.Name)))
+            foreach (var cmd in allCommands.Where(c => _manager._systemCommands.Contains(c.Name) && !_manager._ignoredCommands.Contains(c.Name)))
             {
                 response.AppendLine(FormatCommandLine(cmd));
             }
 
             response.AppendLine();
             response.AppendLine(LocalizationService.GetString("settings_commands"));
-            foreach (var cmd in allCommands.Where(c => _manager._settingsCommands.Contains(c.Name)))
+            foreach (var cmd in allCommands.Where(c => _manager._settingsCommands.Contains(c.Name) && !_manager._ignoredCommands.Contains(c.Name)))
             {
                 response.AppendLine(FormatCommandLine(cmd));
             }
 
             var verifiedCommands = new List<ICommand>();
-            foreach (var cmd in allCommands.Where(c => !_manager._builtInCommands.Contains(c.Name)))
+            foreach (var cmd in allCommands.Where(c => !_manager._builtInCommands.Contains(c.Name) && !_manager._ignoredCommands.Contains(c.Name)))
             {
                 var cmdFileName = $"{cmd.Name.ToLower()}.csx";
                 if (VerifiedExtensionsService.IsExtensionVerified(cmdFileName))
@@ -199,6 +199,7 @@ namespace Mugs.Commands
 
             var externalCommands = allCommands
                 .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
+                       !_manager._ignoredCommands.Contains(c.Name) &&
                        !verifiedCommands.Contains(c))
                 .ToList();
 
@@ -236,7 +237,8 @@ namespace Mugs.Commands
                 .ToList();
 
             var system = allCommands
-                .Where(c => _manager._systemCommands.Contains(c.Name))
+                .Where(c => _manager._systemCommands.Contains(c.Name) &&
+                       !_manager._ignoredCommands.Contains(c.Name))
                 .ToList();
 
             if (system.Any())
@@ -257,7 +259,8 @@ namespace Mugs.Commands
             }
 
             var settings = allCommands
-                .Where(c => _manager._settingsCommands.Contains(c.Name))
+                .Where(c => _manager._settingsCommands.Contains(c.Name) &&
+                       !_manager._ignoredCommands.Contains(c.Name))
                 .ToList();
 
             if (settings.Any())
@@ -279,6 +282,7 @@ namespace Mugs.Commands
 
             var verified = allCommands
                 .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
+                           !_manager._ignoredCommands.Contains(c.Name) &&
                            VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx"))
                 .ToList();
 
@@ -303,6 +307,7 @@ namespace Mugs.Commands
 
             var external = allCommands
                 .Where(c => !_manager._builtInCommands.Contains(c.Name) &&
+                           !_manager._ignoredCommands.Contains(c.Name) &&
                            !VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx"))
                 .ToList();
 
