@@ -3,9 +3,6 @@
 using Mugs.Models;
 using Mugs.Services;
 using Mugs.Interfaces;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Mugs.Commands
 {
@@ -105,7 +102,7 @@ namespace Mugs.Commands
 
             ColorSetters[colorType](colorValue);
             var displayType = LocalizationService.GetString($"color_type_{colorType}");
-            OutputService.WriteSuccess("color_changed", displayType, colorValue);
+            OutputService.WriteResponse("color_changed", displayType, colorValue);
             return Task.CompletedTask;
         }
     }
