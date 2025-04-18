@@ -24,7 +24,22 @@ namespace Mugs.Services
             "time", "update", "new", "debug", "enable",
             "disable", "import", "language", "script",
             "suggestions", "alias", "scan", "history",
-            "version", "logging", "spinner", "color"
+            "version", "logging", "spinner", "color",
+            "tabular"
+        };
+
+        public readonly HashSet<string> _systemCommands = new()
+        {
+            "help", "list", "reload", "clear", "restart",
+            "time", "update", "new", "debug", "enable",
+            "disable", "import", "script", "alias", "scan",
+            "history", "version"
+        };
+
+        public readonly HashSet<string> _settingsCommands = new()
+        {
+            "language", "suggestions", "logging", "spinner",
+            "color", "tabular"
         };
 
         public CommandManager(string extensionsPath)
