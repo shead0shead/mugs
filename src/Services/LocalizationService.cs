@@ -126,7 +126,7 @@ namespace Mugs.Services
                 ["command_help"] = "For detailed help type: help <command>",
                 ["help_command"] = "help",
                 ["help_description"] = "Shows command help",
-                ["help_usage"] = "help update, help new",
+                ["help_usage"] = "help update\nhelp new",
                 ["details_title"] = "{0} Command Details",
                 ["property"] = "Property",
                 ["value"] = "Value",
@@ -245,9 +245,11 @@ namespace Mugs.Services
                 ["script_error"] = "Script execution error: {0}",
 
                 // Toggle suggestions
-                ["toggle_suggestions"] = "Toggles command suggestions display",
-                ["suggestions_enabled"] = "Command suggestions enabled",
-                ["suggestions_disabled"] = "Command suggestions disabled",
+                ["suggestions_description"] = "Toggles command suggestions display",
+                ["suggestions_state"] = "Command suggestions display is currently {0}",
+                ["suggestions_enabled"] = "Command suggestions display enabled",
+                ["suggestions_disabled"] = "Command suggestions display disabled",
+                ["suggestions_invalid_arg"] = "Invalid argument. Use 'on' or 'off'",
 
                 // Command Metadata Cashe
                 ["cache_save_error"] = "Error saving metadata cache: {0}",
@@ -256,7 +258,7 @@ namespace Mugs.Services
 
                 // Alias command
                 ["alias_description"] = "Manage command aliases",
-                ["alias_usage"] = "alias add <command> <alias>, alias remove <alias>, alias list",
+                ["alias_usage"] = "alias add <command> <alias>\nalias remove <alias>\nalias list",
                 ["alias_no_aliases"] = "No custom aliases defined",
                 ["alias_header"] = "Custom aliases:",
                 ["alias_added"] = "Alias '{0}' added for command '{1}'",
@@ -294,16 +296,18 @@ namespace Mugs.Services
                 ["version_table_title"] = "Version Information",
 
                 // Logging command
-                ["logging_description"] = "Enables or disables console logging output",
+                ["logging_description"] = "Toggles console logging output",
                 ["logging_state"] = "Console logging is currently {0}",
                 ["logging_enabled"] = "Console logging enabled",
                 ["logging_disabled"] = "Console logging disabled",
                 ["logging_invalid_arg"] = "Invalid argument. Use 'on' or 'off'",
 
                 // Toggle spinner
-                ["toggle_spinner_description"] = "Toggles spinner animation during command execution",
+                ["spinner_description"] = "Toggles spinner animation during command execution",
+                ["spinner_state"] = "Spinner animation is currently {0}",
                 ["spinner_enabled"] = "Spinner animation enabled",
                 ["spinner_disabled"] = "Spinner animation disabled",
+                ["spinner_invalid_arg"] = "Invalid argument. Use 'on' or 'off'",
 
                 // Color command
                 ["color_description"] = "Manage output colors configuration",
@@ -368,7 +372,7 @@ namespace Mugs.Services
                 ["command_help"] = "Для подробной справки введите: help <команда>",
                 ["help_command"] = "help",
                 ["help_description"] = "Показывает справку по командам",
-                ["help_usage"] = "help update, help new",
+                ["help_usage"] = "help update\nhelp new",
                 ["details_title"] = "Подробности о команде {0}",
                 ["property"] = "Свойство",
                 ["value"] = "Значение",
@@ -487,9 +491,11 @@ namespace Mugs.Services
                 ["script_error"] = "Ошибка выполнения скрипта: {0}",
 
                 // Переключение подсказок
-                ["toggle_suggestions"] = "Переключает отображение подсказок команд",
-                ["suggestions_enabled"] = "Подсказки команд включены",
-                ["suggestions_disabled"] = "Подсказки команд отключены",
+                ["suggestions_description"] = "Переключает отображение подсказок команд",
+                ["suggestions_state"] = "Отображение подсказок команд сейчас {0}",
+                ["suggestions_enabled"] = "Отображение подсказок команд включено",
+                ["suggestions_disabled"] = "Отображение подсказок команд выключено",
+                ["suggestions_invalid_arg"] = "Неверный аргумент. Используйте 'on' или 'off'",
 
                 // Кэш метаданных команд
                 ["cache_save_error"] = "Ошибка сохранения кэша метаданных: {0}",
@@ -498,7 +504,7 @@ namespace Mugs.Services
 
                 // Команда alias
                 ["alias_description"] = "Управление псевдонимами команд",
-                ["alias_usage"] = "alias add <команда> <псевдоним>, alias remove <псевдоним>, alias list",
+                ["alias_usage"] = "alias add <команда> <псевдоним>\nalias remove <псевдоним>\nalias list",
                 ["alias_no_aliases"] = "Пользовательские псевдонимы не определены",
                 ["alias_header"] = "Пользовательские псевдонимы:",
                 ["alias_added"] = "Псевдоним '{0}' добавлен для команды '{1}'",
@@ -536,16 +542,18 @@ namespace Mugs.Services
                 ["version_table_title"] = "Информация о версии",
 
                 // Команда logging
-                ["logging_description"] = "Включает или отключает вывод логов в консоль",
+                ["logging_description"] = "Переключает вывод логов в консоль",
                 ["logging_state"] = "Вывод логов в консоль сейчас {0}",
                 ["logging_enabled"] = "Вывод логов в консоль включен",
                 ["logging_disabled"] = "Вывод логов в консоль отключен",
                 ["logging_invalid_arg"] = "Неверный аргумент. Используйте 'on' или 'off'",
 
                 // Переключение спиннера
-                ["toggle_spinner_description"] = "Включает/выключает анимацию спиннера при выполнении команд",
+                ["spinner_description"] = "Переключает анимацию спиннера при выполнении команд",
+                ["spinner_state"] = "Анимация спиннера сейчас {0}",
                 ["spinner_enabled"] = "Анимация спиннера включена",
                 ["spinner_disabled"] = "Анимация спиннера выключена",
+                ["spinner_invalid_arg"] = "Неверный аргумент. Используйте 'on' или 'off'",
 
                 // Команда color
                 ["color_description"] = "Управление цветами вывода",
