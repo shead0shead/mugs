@@ -1,4 +1,4 @@
-﻿// Mugs/Commands/ToggleTableViewCommand.cs
+﻿// Mugs/Commands/TabularCommand.cs
 
 using Mugs.Services;
 using Mugs.Interfaces;
@@ -6,11 +6,11 @@ using Mugs.Models;
 
 namespace Mugs.Commands
 {
-    public class ToggleTableViewCommand : ICommand
+    public class TabularCommand : ICommand
     {
         public string Name => "tabular";
         public string Description => LocalizationService.GetString("tabular_description");
-        public IEnumerable<string> Aliases => new[] { "ttv" };
+        public IEnumerable<string> Aliases => new[] { "table" };
         public string Author => "System";
         public string Version => "1.0";
         public string? UsageExample => "tabular on\ntabular off\ntabular toggle";
@@ -26,8 +26,8 @@ namespace Mugs.Commands
                 return Task.CompletedTask;
             }
 
-            var mode = args[0].ToLower();
-            switch (mode)
+            var arg = args[0].ToLower();
+            switch (arg)
             {
                 case "on":
                 case "enable":
