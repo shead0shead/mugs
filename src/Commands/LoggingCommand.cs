@@ -11,33 +11,45 @@ public class LoggingCommand : ICommand
     public IEnumerable<string> Aliases => new[] { "log" };
     public string Author => "System";
     public string Version => "1.0";
-    public string? UsageExample => LocalizationService.GetString("logging_usage");
+    public string? UsageExample => "logging on\nlogging off\nlogging toggle";
 
     public Task ExecuteAsync(string[] args)
     {
         if (args.Length == 0)
         {
-            var state = AppSettings.EnableConsoleLogging
-                ? LocalizationService.GetString("enabled")
-                : LocalizationService.GetString("disabled");
-            OutputService.WriteResponse("logging_state", state);
+            OutputService.WriteResponse("logging_state",
+                AppSettings.EnableConsoleLogging ?
+                LocalizationService.GetString("enabled") :
+                LocalizationService.GetString("disabled"));
             return Task.CompletedTask;
         }
 
         var arg = args[0].ToLower();
-        if (arg == "on" || arg == "enable" || arg == "true" || arg == "1")
+        switch (arg)
         {
-            AppSettings.EnableConsoleLogging = true;
-            OutputService.WriteResponse("logging_enabled");
-        }
-        else if (arg == "off" || arg == "disable" || arg == "false" || arg == "0")
-        {
-            AppSettings.EnableConsoleLogging = false;
-            OutputService.WriteResponse("logging_disabled");
-        }
-        else
-        {
-            OutputService.WriteError("logging_invalid_arg");
+            case "on":
+            case "enable":
+            case "true":
+                AppSettings.EnableConsoleLogging = true;
+                OutputService.WriteResponse("logging_enabled");
+                break;
+
+            case "off":
+            case "disable":
+            case "false":
+                AppSettings.EnableConsoleLogging = false;
+                OutputService.WriteResponse("logging_disabled");
+                break;
+
+            case "toggle":
+                AppSettings.EnableConsoleLogging = !AppSettings.EnableConsoleLogging;
+                OutputService.WriteResponse(AppSettings.EnableConsoleLogging ?
+                    "logging_enabled" : "logging_disabled");
+                break;
+
+            default:
+                OutputService.WriteError("logging_invalid_arg");
+                break;
         }
 
         return Task.CompletedTask;
