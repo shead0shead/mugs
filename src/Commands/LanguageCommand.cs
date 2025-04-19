@@ -15,7 +15,7 @@ namespace Mugs.Commands
         public IEnumerable<string> Aliases => new[] { "lang" };
         public string Author => "System";
         public string Version => "1.0";
-        public string? UsageExample => "language en, language ru";
+        public string? UsageExample => "language en\nlanguage ru";
 
         public Task ExecuteAsync(string[] args)
         {
