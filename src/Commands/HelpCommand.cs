@@ -248,7 +248,7 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         system.Select(c => c.Name),
                         system.Select(c => c.Description),
-                        system.Select(c => string.Join(", ", c.Aliases))
+                        system.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-")
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
@@ -270,7 +270,7 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         settings.Select(c => c.Name),
                         settings.Select(c => c.Description),
-                        settings.Select(c => string.Join(", ", c.Aliases))
+                        settings.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-")
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
@@ -293,7 +293,7 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         verified.Select(c => c.Name),
                         verified.Select(c => c.Description),
-                        verified.Select(c => string.Join(", ", c.Aliases)),
+                        verified.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-"),
                         verified.Select(c => "✅")
                     },
                     new List<string> {
@@ -318,7 +318,7 @@ namespace Mugs.Commands
                     new List<IEnumerable<string>> {
                         external.Select(c => c.Name),
                         external.Select(c => c.Description),
-                        external.Select(c => string.Join(", ", c.Aliases))
+                        external.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-")
                     },
                     new List<string> {
                         LocalizationService.GetString("command"),
