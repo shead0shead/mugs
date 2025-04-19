@@ -81,8 +81,8 @@ namespace Mugs.Services
         private void RegisterBuiltInCommands()
         {
             RegisterCommand(new HelpCommand(this));
-            RegisterCommand(new ListCommandsCommand(this, _extensionsPath));
-            RegisterCommand(new ReloadCommandsCommand(this));
+            RegisterCommand(new ListCommand(this, _extensionsPath));
+            RegisterCommand(new ReloadCommand(this));
             RegisterCommand(new ClearCommand(this));
             RegisterCommand(new RestartCommand());
             RegisterCommand(new TimeCommand());
@@ -94,15 +94,15 @@ namespace Mugs.Services
             RegisterCommand(new ImportCommand(this, _extensionsPath));
             RegisterCommand(new LanguageCommand());
             RegisterCommand(new ScriptCommand());
-            RegisterCommand(new ToggleSuggestionsCommand());
+            RegisterCommand(new SuggestionsCommand());
             RegisterCommand(new AliasCommand());
             RegisterCommand(new ScanCommand(_extensionsPath));
             RegisterCommand(new HistoryCommand());
             RegisterCommand(new VersionCommand(this));
             RegisterCommand(new LoggingCommand());
-            RegisterCommand(new ToggleSpinnerCommand());
+            RegisterCommand(new SpinnerCommand());
             RegisterCommand(new ColorCommand());
-            RegisterCommand(new ToggleTableViewCommand());
+            RegisterCommand(new TabularCommand());
         }
 
         private async Task LoadExternalCommandsAsync()
