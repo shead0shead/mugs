@@ -326,7 +326,7 @@ namespace Mugs.Services
                 ["color_type_debug"] = "Debug",
 
                 // Tabular command
-                ["tabular_description"] = "Toggles always use tabular view mode for command outputs",
+                ["tabular_description"] = "Toggles tabular view mode for command outputs",
                 ["tabular_current_mode"] = "Current tabular view mode: {0}",
                 ["tabular_mode_enabled"] = "Tabular view mode enabled",
                 ["tabular_mode_disabled"] = "Tabular view mode disabled",
@@ -572,7 +572,7 @@ namespace Mugs.Services
                 ["color_type_debug"] = "Debug",
 
                 // Команда tabular
-                ["tabular_description"] = "Переключает режим постоянного использования табличного вывода для команд",
+                ["tabular_description"] = "Переключает режим табличного вывода для команд",
                 ["tabular_current_mode"] = "Текущий режим табличного вывода: {0}",
                 ["tabular_mode_enabled"] = "Режим табличного вывода включен",
                 ["tabular_mode_disabled"] = "Режим табличного вывода выключен",
