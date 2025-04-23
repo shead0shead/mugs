@@ -3,9 +3,6 @@
 using Mugs.Services;
 using Mugs.Interfaces;
 
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
-
 namespace Mugs.Commands
 {
     public class ScanCommand : ICommand
