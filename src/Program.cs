@@ -1,7 +1,7 @@
 ﻿// Mugs/Program.cs
 
-using Mugs.Models;
 using Mugs.Services;
+using Mugs.Models;
 
 public class Program
 {
