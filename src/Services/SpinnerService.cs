@@ -1,8 +1,5 @@
 ﻿// Mugs/Services/SpinnerService.cs
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
+
 using Mugs.Models;
 
 namespace Mugs.Services
