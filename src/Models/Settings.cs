@@ -26,7 +26,7 @@ namespace Mugs.Models
             public ConsoleColor SuccessColor { get; set; } = ConsoleColor.DarkGreen;
             public ConsoleColor InfoColor { get; set; } = ConsoleColor.DarkCyan;
             public ConsoleColor DebugColor { get; set; } = ConsoleColor.Yellow;
-            public bool AlwaysUseTabularView {  get; set; } = false;
+            public bool AlwaysUseTabularView { get; set; } = false;
         }
 
         public static void Initialize()
