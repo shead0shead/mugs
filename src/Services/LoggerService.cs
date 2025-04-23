@@ -1,6 +1,5 @@
 ﻿// Mugs/Services/LoggerService.cs
 
-using System.Drawing;
 using Mugs.Models;
 
 namespace Mugs.Services
