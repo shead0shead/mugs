@@ -1,8 +1,8 @@
 ﻿// Mugs/Commands/ColorCommand.cs
 
-using Mugs.Models;
 using Mugs.Services;
 using Mugs.Interfaces;
+using Mugs.Models;
 
 namespace Mugs.Commands
 {
