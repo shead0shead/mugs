@@ -152,7 +152,6 @@ namespace Mugs.Commands
             );
         }
 
-
         private async Task ShowAllCommands()
         {
             await VerifiedExtensionsService.EnsureHashesLoadedAsync();
