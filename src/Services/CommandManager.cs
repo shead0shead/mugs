@@ -103,6 +103,7 @@ namespace Mugs.Services
             RegisterCommand(new SpinnerCommand());
             RegisterCommand(new ColorCommand());
             RegisterCommand(new TabularCommand());
+            RegisterCommand(new BoxedCommand());
         }
 
         private async Task LoadExternalCommandsAsync()
