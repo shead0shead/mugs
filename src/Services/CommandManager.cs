@@ -25,7 +25,7 @@ namespace Mugs.Services
             "disable", "import", "language", "script",
             "suggestions", "alias", "scan", "history",
             "version", "logging", "spinner", "color",
-            "tabular"
+            "tabular", "boxed"
         };
 
         public readonly HashSet<string> _systemCommands = new()
