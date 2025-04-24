@@ -334,6 +334,17 @@ namespace Mugs.Services
                 ["enabled"] = "ENABLED",
                 ["disabled"] = "DISABLED",
 
+                // Boxed command
+                ["boxed_description"] = "Toggles and configurate boxed style for command outputs",
+                ["boxed_state"] = "Boxed output style is currently {0}",
+                ["boxed_enabled"] = "Boxed output style enabled",
+                ["boxed_disabled"] = "Boxed output style disabled",
+                ["boxed_invalid_arg"] = "Invalid argument. Use 'on', 'off', 'toggle' or 'title'",
+                ["boxed_title_state"] = "Boxed output style title is currently {0}",
+                ["boxed_title_enabled"] = "Boxed output style title enabled",
+                ["boxed_title_disabled"] = "Boxed output style title disabled",
+                ["boxed_title_invalid_arg"] = "Invalid title argument. Use 'title on', 'title off' or 'title toggle'",
+
                 // Duplicates
                 ["command_conflict_header"] = "Command conflict in {0}:",
                 ["command_name_conflict"] = "Command name '{0}' is already registered",
@@ -579,6 +590,17 @@ namespace Mugs.Services
                 ["tabular_invalid_mode"] = "Неверный режим. Используйте: on|off|toggle",
                 ["enabled"] = "ВКЛЮЧЕН",
                 ["disabled"] = "ВЫКЛЮЧЕН",
+
+                // Команда boxed
+                ["boxed_description"] = "Переключает и настраивает рамочный стиль для выводов команд",
+                ["boxed_state"] = "Рамочный стиль вывода сейчас {0}",
+                ["boxed_enabled"] = "Рамочный стиль вывода включен",
+                ["boxed_disabled"] = "Рамочный стиль вывода выключен",
+                ["boxed_invalid_arg"] = "Неверный аргумент. Используйте 'on', 'off', 'toggle' или 'title'",
+                ["boxed_title_state"] = "Заголовок рамочного стиля вывода сейчас {0}",
+                ["boxed_title_enabled"] = "Заголовок рамочного стиля вывода включен",
+                ["boxed_title_disabled"] = "Заголовок рамочного стиля вывода выключен",
+                ["boxed_title_invalid_arg"] = "Неверный аргумент заголовка. Используйте 'title on', 'title off' или 'title toggle'",
 
                 // Дубликаты
                 ["command_conflict_header"] = "Конфликт команд в {0}:",
