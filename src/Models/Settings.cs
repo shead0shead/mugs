@@ -28,6 +28,7 @@ namespace Mugs.Models
             public ConsoleColor DebugColor { get; set; } = ConsoleColor.Yellow;
             public bool AlwaysUseTabularView { get; set; } = false;
             public bool EnableBoxedOutput { get; set; } = false;
+            public bool EnableBoxedOutputTitle { get; set; } = true;
         }
 
         public static void Initialize()
@@ -197,6 +198,16 @@ namespace Mugs.Models
             set
             {
                 _currentSettings.EnableBoxedOutput = value;
+                SaveSettings();
+            }
+        }
+
+        public static bool EnableBoxedOutputTitle
+        {
+            get => _currentSettings.EnableBoxedOutputTitle;
+            set
+            {
+                _currentSettings.EnableBoxedOutputTitle = value;
                 SaveSettings();
             }
         }
