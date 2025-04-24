@@ -40,6 +40,18 @@ namespace Mugs.Services
             Console.WriteLine();
         }
 
+        private static void Write(string messageKey, ConsoleColor borderColor, string logPrefix, params object[] args)
+        {
+            if (AppSettings.EnableBoxedOutput)
+            {
+                WriteBoxed(messageKey, borderColor, logPrefix, args);
+            }
+            else
+            {
+                WriteDefault(messageKey, borderColor, logPrefix, args);
+            }
+        }
+
         private static void WriteDefault(string messageKey, ConsoleColor borderColor, string logPrefix, params object[] args)
         {
             var message = LocalizationService.GetString(messageKey, args);
