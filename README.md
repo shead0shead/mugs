@@ -54,6 +54,8 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `history` - Show command history  
 * `version` - Show the application version (use `--table` for tabular output)  
 * `debug <command>` - Run a command in debug mode  
+* `boxed` - Toggle boxed output style (use `boxed on/off/toggle`)  
+* `boxed title` - Toggle title in boxed output (use `boxed title on/off/toggle`)  
 
 ### Tabular View
 For better readability, both `help`, `list` and `version` commands support tabular output format:
@@ -71,6 +73,21 @@ tabular          # Show current mode
 tabular on       # Always use tables
 tabular off      # Use default list view  
 tabular toggle   # Switch between modes
+```
+
+### Boxed Output Style
+
+For decorative boxed output:
+
+```bash
+boxed          # Show current boxed output status
+boxed on       # Enable boxed output style
+boxed off      # Disable boxed output style  
+boxed toggle   # Toggle boxed output style
+
+boxed title on     # Enable titles in boxed output
+boxed title off    # Disable titles
+boxed title toggle # Toggle title visibility
 ```
 
 ## Creating Custom Commands
