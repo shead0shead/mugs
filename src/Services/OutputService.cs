@@ -73,6 +73,78 @@ namespace Mugs.Services
             Console.WriteLine();
         }
 
+        public static void WriteBoxed(string messageKey, ConsoleColor borderColor, string logPrefix, params object[] args)
+        {
+            const char TopLeft = '╭';
+            const char TopRight = '╮';
+            const char BottomLeft = '╰';
+            const char BottomRight = '╯';
+            const char Horizontal = '─';
+            const char Vertical = '│';
+            const char Space = ' ';
+
+            var message = LocalizationService.GetString(messageKey, args);
+            var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            int maxLength = lines.Max(line => line.Length);
+            int boxWidth;
+
+            boxWidth = Console.WindowWidth;
+            // boxWidth = Math.Max(maxLength + 4, 10);
+
+            switch (logPrefix)
+            {
+                case "Error":
+                    LoggerService.LogError($"Error: {message}");
+                    break;
+                case "Warning":
+                    LoggerService.LogWarning($"Warning: {message}");
+                    break;
+                case "Debug":
+                    LoggerService.LogDebug($"Debug: {message}");
+                    break;
+                default:
+                    LoggerService.LogInfo($"{logPrefix}: {message}");
+                    break;
+            }
+
+            Console.ForegroundColor = borderColor;
+            Console.Write(TopLeft);
+            if (AppSettings.EnableBoxedOutputTitle)
+            {
+                Console.Write(Horizontal + $" {logPrefix} " + new string(Horizontal, boxWidth - 5 - logPrefix.Length));
+            }
+            else
+            {
+                Console.Write(new string(Horizontal, boxWidth - 2));
+            }
+            Console.WriteLine(TopRight);
+            Console.ResetColor();
+
+            foreach (var line in lines)
+            {
+                Console.ForegroundColor = borderColor;
+                Console.Write(Vertical);
+                Console.ResetColor();
+
+                Console.Write(Space);
+                if (logPrefix == "Error") Console.ForegroundColor = borderColor;
+                Console.Write(line.PadRight(boxWidth - 4));
+                Console.Write(Space);
+
+                Console.ForegroundColor = borderColor;
+                Console.WriteLine(Vertical);
+                Console.ResetColor();
+            }
+
+            Console.ForegroundColor = borderColor;
+            Console.Write(BottomLeft);
+            Console.Write(new string(Horizontal, boxWidth - 2));
+            Console.WriteLine(BottomRight);
+            Console.ResetColor();
+
+            Console.WriteLine();
+        }
+
         public static void WriteTable(string title, IEnumerable<string> items)
         {
             const char TopLeft = '╭';
