@@ -40,7 +40,7 @@ namespace Mugs.Services
             Console.WriteLine();
         }
 
-        private static void Write(string messageKey, ConsoleColor borderColor, string logPrefix, params object[] args)
+        private static void WriteDefault(string messageKey, ConsoleColor borderColor, string logPrefix, params object[] args)
         {
             var message = LocalizationService.GetString(messageKey, args);
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
