@@ -1,22 +1,22 @@
 {
-    "latestVersion": "1.3.0",
+    "latestVersion": "1.3.1",
     "critical": false,
-    "changelog": "• Add duplicate command validation\n• Add new message types to output service\n• Add security scan service for addon validation\n• Add color command for message styling\n• Add tabular view\n• Add new command categories",
+    "changelog": "• Remove unused and standardize usings\n• Add new boxed output style\n• Add boxed command",
     "assets": [
       {
         "fileName": "Mugs.exe",
-        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.3.0/Mugs.exe",
-        "sha256": "e9b6a77c89528a8bd69c40d45ab02d23e311ef1e805d0c414d5ca6eca8480955"
+        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.3.1/Mugs.exe",
+        "sha256": "2af85505b42c5f5a4b001c12e8a13a31db4ea4f330130584408319f9604e7cdf"
       },
       {
         "fileName": "en.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/en.json",
-        "sha256": "e8b1ad778b6b90a668218b0115ff7cc7d9d5cf22523d98baf5ccba62ce11eb95"
+        "sha256": "f2d49f01e4638964ded3ae020502e9f2aabc8c0fd00c21bb994b0e5431d6db61"
       },
       {
         "fileName": "ru.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/ru.json",
-        "sha256": "8b7095e3f1e0c275d3137e8817fb81d23c6414be2f96336bb29f0bf00716b2f7"
+        "sha256": "130bce1fb37c893b0f05309c6a967bd748a2c91459745d79e59f86445c8d1f61"
       }
     ]
   }
