@@ -39,7 +39,7 @@ namespace Mugs.Services
         public readonly HashSet<string> _settingsCommands = new()
         {
             "language", "suggestions", "logging", "spinner",
-            "color", "tabular", "boxed"
+            "color", "tabular", "boxed", "promptstyle"
         };
 
         public readonly HashSet<string> _ignoredCommands = new()
