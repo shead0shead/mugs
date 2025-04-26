@@ -56,6 +56,8 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `debug <command>` - Run a command in debug mode  
 * `boxed` - Toggle boxed output style (use `boxed on/off/toggle`)  
 * `boxed title` - Toggle title in boxed output (use `boxed title on/off/toggle`)  
+* `prompt <symbol>` - Change input prompt symbol (e.g. `prompt $` or `prompt λ`)  
+* `prompt reset` - Reset to default prompt (>)  
 
 ### Tabular View
 For better readability, both `help`, `list` and `version` commands support tabular output format:
