@@ -345,6 +345,13 @@ namespace Mugs.Services
                 ["boxed_title_disabled"] = "Boxed output style title disabled",
                 ["boxed_title_invalid_arg"] = "Invalid title argument. Use 'title on', 'title off' or 'title toggle'",
 
+                // PromptStyle command
+                ["prompt_description"] = "Changes the input prompt style",
+                ["prompt_current"] = "Current prompt style: {0}",
+                ["prompt_changed"] = "Prompt style changed to '{0}'",
+                ["prompt_reset"] = "Prompt style reset to default '>'",
+                ["prompt_invalid_length"] = "Prompt style must be 1-3 characters long",
+
                 // Duplicates
                 ["command_conflict_header"] = "Command conflict in {0}:",
                 ["command_name_conflict"] = "Command name '{0}' is already registered",
@@ -601,6 +608,13 @@ namespace Mugs.Services
                 ["boxed_title_enabled"] = "Заголовок рамочного стиля вывода включен",
                 ["boxed_title_disabled"] = "Заголовок рамочного стиля вывода выключен",
                 ["boxed_title_invalid_arg"] = "Неверный аргумент заголовка. Используйте 'title on', 'title off' или 'title toggle'",
+
+                // Команда promptstyle
+                ["prompt_description"] = "Изменяет символ приглашения ввода",
+                ["prompt_current"] = "Текущий символ приглашения: {0}",
+                ["prompt_changed"] = "Символ приглашения изменён на '{0}'",
+                ["prompt_reset"] = "Символ приглашения сброшен к стандартному '>'",
+                ["prompt_invalid_length"] = "Символ приглашения должен быть длиной 1-3 символа",
 
                 // Дубликаты
                 ["command_conflict_header"] = "Конфликт команд в {0}:",
