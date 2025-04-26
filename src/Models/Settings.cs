@@ -29,6 +29,7 @@ namespace Mugs.Models
             public bool AlwaysUseTabularView { get; set; } = false;
             public bool EnableBoxedOutput { get; set; } = false;
             public bool EnableBoxedOutputTitle { get; set; } = true;
+            public string PromptStyle { get; set; } = ">";
         }
 
         public static void Initialize()
