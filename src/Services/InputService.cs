@@ -103,7 +103,7 @@ namespace Mugs.Services
             Console.SetCursorPosition(0, _inputRow);
             Console.Write(new string(' ', Console.WindowWidth - 1));
             Console.SetCursorPosition(0, _inputRow);
-            Console.Write("> ");
+            Console.Write(AppSettings.PromptStyle + " ");
 
             var isValid = manager.IsValidCommand(input);
             Console.ForegroundColor = isValid ? ConsoleColor.Gray : ConsoleColor.Red;
@@ -120,7 +120,7 @@ namespace Mugs.Services
             }
 
             Console.ResetColor();
-            Console.SetCursorPosition(Math.Min(cursorPosition + 2, Console.WindowWidth - 1), _inputRow);
+            Console.SetCursorPosition(Math.Min(cursorPosition + AppSettings.PromptStyle.Length + 1, Console.WindowWidth - 1), _inputRow);
         }
 
         public static void ClearInputLine()
