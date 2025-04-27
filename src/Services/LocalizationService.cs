@@ -324,6 +324,8 @@ namespace Mugs.Services
                 ["color_type_success"] = "Success",
                 ["color_type_info"] = "Info",
                 ["color_type_debug"] = "Debug",
+                ["color_type"] = "Type",
+                ["current_value"] = "Current Value",
 
                 // Tabular command
                 ["tabular_description"] = "Toggles tabular view mode for command outputs",
@@ -588,6 +590,8 @@ namespace Mugs.Services
                 ["color_type_success"] = "Success",
                 ["color_type_info"] = "Info",
                 ["color_type_debug"] = "Debug",
+                ["color_type"] = "Тип",
+                ["current_value"] = "Текущее Значение",
 
                 // Команда tabular
                 ["tabular_description"] = "Переключает режим табличного вывода для команд",
