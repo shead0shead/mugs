@@ -37,15 +37,19 @@ namespace Mugs.Commands
 
         public Task ExecuteAsync(string[] args)
         {
-            if (args.Length == 0 || args[0] == "list")
+            bool useTable = AppSettings.AlwaysUseTabularView ||
+                           (args.Length > 0 && args.Contains("--table"));
+            var cleanArgs = args.Where(a => a != "--table").ToArray();
+
+            if (cleanArgs.Length == 0 || cleanArgs[0] == "list")
             {
-                return ListColors();
+                return useTable ? ListColorsAsTable() : ListColors();
             }
 
-            switch (args[0].ToLower())
+            switch (cleanArgs[0].ToLower())
             {
                 case "get" when args.Length > 1:
-                    return GetColor(args[1]);
+                    return useTable ? GetColorAsTable(cleanArgs[1]) : GetColor(cleanArgs[1]);
                 case "set" when args.Length > 2:
                     return SetColor(args[1], args[2]);
                 default:
@@ -70,6 +74,29 @@ namespace Mugs.Commands
             return Task.CompletedTask;
         }
 
+        private Task ListColorsAsTable()
+        {
+            var colorSettings = ColorGetters.Keys.Select(type => new
+            {
+                Type = LocalizationService.GetString($"color_type_{type}"),
+                CurrentColor = ColorGetters[type]().ToString()
+            }).ToList();
+
+            OutputService.WriteTableColumnsHighlight(
+                LocalizationService.GetString("color_available_settings"),
+                new List<IEnumerable<string>> {
+                    colorSettings.Select(c => c.Type),
+                    colorSettings.Select(c => c.CurrentColor)
+                },
+                new List<string> {
+                    LocalizationService.GetString("color_type"),
+                    LocalizationService.GetString("current_value")
+                }
+            );
+
+            return Task.CompletedTask;
+        }
+
         private Task GetColor(string colorType)
         {
             if (!ColorGetters.ContainsKey(colorType))
@@ -81,6 +108,29 @@ namespace Mugs.Commands
             var color = ColorGetters[colorType]();
             var displayType = LocalizationService.GetString($"color_type_{colorType}");
             OutputService.WriteResponse("color_current_value", displayType, color);
+            return Task.CompletedTask;
+        }
+
+        private Task GetColorAsTable(string colorType)
+        {
+            if (!ColorGetters.ContainsKey(colorType))
+            {
+                OutputService.WriteError("color_invalid_type", colorType);
+                return Task.CompletedTask;
+            }
+
+            var color = ColorGetters[colorType]();
+            var displayType = LocalizationService.GetString($"color_type_{colorType}");
+
+            OutputService.WriteTableColumnsHighlight(
+                $"{displayType} Color",
+                new List<IEnumerable<string>> {
+            new[] { LocalizationService.GetString("color_type"), LocalizationService.GetString("current_value") },
+            new[] { displayType, color.ToString() }
+                },
+                new List<string> { "Property", "Value" }
+            );
+
             return Task.CompletedTask;
         }
 
