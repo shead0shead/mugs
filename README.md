@@ -36,7 +36,7 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `list` - List all available commands (use `--table` for tabular output)  
 * `reload` - Reload all commands  
 * `clear` - Clear the console  
-* `color` - Manage output colors  
+* `color` - Manage output colors (use `--table` for tabular output)  
 * `restart` - Fully restart the application  
 * `tabular` - Enable/disable tabular view mode for outputs   
 * `time` - Show the current time  
@@ -60,7 +60,7 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `prompt reset` - Reset to default prompt (>)  
 
 ### Tabular View
-For better readability, both `help`, `list` and `version` commands support tabular output format:
+For better readability, both `help`, `list`, `version` and `color` commands support tabular output format:
 
 ```bash
 help --table         # Show all commands in a formatted table
