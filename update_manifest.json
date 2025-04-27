@@ -1,22 +1,22 @@
 {
-    "latestVersion": "1.3.1",
+    "latestVersion": "1.3.2",
     "critical": false,
-    "changelog": "• Remove unused and standardize usings\n• Add new boxed output style\n• Add boxed command",
+    "changelog": "• Add prompt style setting and command\n• Add tabular output for color command\n• Add command history limit setting",
     "assets": [
       {
         "fileName": "Mugs.exe",
         "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.3.1/Mugs.exe",
-        "sha256": "2af85505b42c5f5a4b001c12e8a13a31db4ea4f330130584408319f9604e7cdf"
+        "sha256": "b87b9d9943ddae900b158bb1ed2685d980bab10de8463e3b63d7fa44184134fa"
       },
       {
         "fileName": "en.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/en.json",
-        "sha256": "f2d49f01e4638964ded3ae020502e9f2aabc8c0fd00c21bb994b0e5431d6db61"
+        "sha256": "6aecf960d5a22e745de83db338eb99cfa8e0edba8c03c5364744556381e780fe"
       },
       {
         "fileName": "ru.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/ru.json",
-        "sha256": "130bce1fb37c893b0f05309c6a967bd748a2c91459745d79e59f86445c8d1f61"
+        "sha256": "2904811f1d1b1258aa19b8d6eb5190fe872778fbdda532f85b1206e10bf248af"
       }
     ]
   }
