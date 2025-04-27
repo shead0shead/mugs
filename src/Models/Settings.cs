@@ -30,6 +30,7 @@ namespace Mugs.Models
             public bool EnableBoxedOutput { get; set; } = false;
             public bool EnableBoxedOutputTitle { get; set; } = true;
             public string PromptStyle { get; set; } = ">";
+            public int CommandHistoryLimit { get; set; } = 10;
         }
 
         public static void Initialize()
@@ -219,6 +220,16 @@ namespace Mugs.Models
             set
             {
                 _currentSettings.PromptStyle = value;
+                SaveSettings();
+            }
+        }
+
+        public static int CommandHistoryLimit
+        {
+            get => _currentSettings.CommandHistoryLimit;
+            set
+            {
+                _currentSettings.CommandHistoryLimit = value;
                 SaveSettings();
             }
         }
