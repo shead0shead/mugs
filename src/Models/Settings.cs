@@ -213,6 +213,16 @@ namespace Mugs.Models
             }
         }
 
+        public static string PromptStyle
+        {
+            get => _currentSettings.PromptStyle;
+            set
+            {
+                _currentSettings.PromptStyle = value;
+                SaveSettings();
+            }
+        }
+
         private static void SaveSettings()
         {
             try
