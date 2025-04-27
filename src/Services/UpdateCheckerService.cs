@@ -15,7 +15,7 @@ namespace Mugs.Services
         private const string GitHubRepoName = "mugs";
         private const string ManifestUrl = $"https://raw.githubusercontent.com/{GitHubRepoOwner}/{GitHubRepoName}/main/update_manifest.json";
         private static readonly HttpClient _httpClient = new HttpClient();
-        public static readonly Version CurrentVersion = new Version("1.3.1");
+        public static readonly Version CurrentVersion = new Version("1.3.2");
 
         static UpdateCheckerService()
         {
