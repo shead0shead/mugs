@@ -2,6 +2,7 @@
 
 using Mugs.Services;
 using Mugs.Interfaces;
+using Mugs.Models;
 
 using System.Text;
 
@@ -47,7 +48,7 @@ namespace Mugs.Commands
             }
             else
             {
-                int count = 10;
+                int count = AppSettings.CommandHistoryLimit;
                 if (args.Length > 0 && int.TryParse(args[0], out int requestedCount) && requestedCount > 0)
                 {
                     count = requestedCount;
