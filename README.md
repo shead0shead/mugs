@@ -37,6 +37,7 @@ After launching, you will see a welcome message. Type `help` to view the list of
 * `reload` - Reload all commands  
 * `clear` - Clear the console  
 * `color` - Manage output colors (use `--table` for tabular output)  
+* `config` - Manage application configuration  
 * `restart` - Fully restart the application  
 * `tabular` - Enable/disable tabular view mode for outputs   
 * `time` - Show the current time  
