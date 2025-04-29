@@ -105,6 +105,7 @@ namespace Mugs.Services
             RegisterCommand(new TabularCommand());
             RegisterCommand(new BoxedCommand());
             RegisterCommand(new PromptStyleCommand());
+            RegisterCommand(new ConfigCommand());
         }
 
         private async Task LoadExternalCommandsAsync()
