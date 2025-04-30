@@ -93,6 +93,24 @@ boxed title off    # Disable titles
 boxed title toggle # Toggle title visibility
 ```
 
+### Filtered Help Output
+
+You can filter commands by category:
+
+```bash
+help --system        # Show only system commands
+help --settings      # Show only settings commands  
+help --verified      # Show only verified commands
+help --other         # Show only third-party commands
+help --third         # Alias for --other
+help --thirdparty    # Alias for --other
+
+# Combined filters:
+help --system --settings     # System + settings commands
+help --verified --other      # Verified + third-party commands
+help --system --table        # System commands in table view
+```
+
 ## Creating Custom Commands
 
 1. Use the command `new mycommand` to create a template  
