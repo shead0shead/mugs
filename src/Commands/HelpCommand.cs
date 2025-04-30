@@ -23,7 +23,8 @@ namespace Mugs.Commands
         public async Task ExecuteAsync(string[] args)
         {
             bool useTable = args.Length > 0 && args.Contains("--table");
-            var commandArgs = args.Where(a => a != "--table").ToArray();
+            var commandArgs = args.Where(a => !a.StartsWith("--")).ToArray();
+            var filterArgs = args.Where(a => a.StartsWith("--")).ToList();
 
             if (commandArgs.Length > 0)
             {
@@ -46,13 +47,38 @@ namespace Mugs.Commands
                 OutputService.WriteError("command_not_found", commandName);
             }
 
+            if (filterArgs.Count == 0)
+            {
+                if (useTable || AppSettings.AlwaysUseTabularView)
+                {
+                    await ShowAllCommandsAsTable();
+                }
+                else
+                {
+                    await ShowAllCommands();
+                }
+                return;
+            }
+
+            bool showSystem = filterArgs.Contains("--system");
+            bool showSettings = filterArgs.Contains("--settings");
+            bool showVerified = filterArgs.Contains("--verified");
+            bool showOther = filterArgs.Contains("--other") ||
+                            filterArgs.Contains("--third") ||
+                            filterArgs.Contains("--thirdparty");
+
+            if (!showSystem && !showSettings && !showVerified && !showOther)
+            {
+                showSystem = showSettings = showVerified = showOther = true;
+            }
+
             if (useTable || AppSettings.AlwaysUseTabularView)
             {
-                await ShowAllCommandsAsTable();
+                await ShowFilteredCommandsAsTable(showSystem, showSettings, showVerified, showOther);
             }
             else
             {
-                await ShowAllCommands();
+                await ShowFilteredCommands(showSystem, showSettings, showVerified, showOther);
             }
         }
 
@@ -325,6 +351,176 @@ namespace Mugs.Commands
                         LocalizationService.GetString("aliases")
                     }
                 );
+            }
+        }
+
+        private async Task ShowFilteredCommands(bool showSystem, bool showSettings, bool showVerified, bool showOther)
+        {
+            await VerifiedExtensionsService.EnsureHashesLoadedAsync();
+            var response = new StringBuilder();
+            var allCommands = _manager.GetAllCommands()
+                .GroupBy(c => c.Name)
+                .Select(g => g.First())
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            if (showSystem)
+            {
+                response.AppendLine(LocalizationService.GetString("system_commands"));
+                foreach (var cmd in allCommands.Where(c => _manager._systemCommands.Contains(c.Name)))
+                {
+                    response.AppendLine(FormatCommandLine(cmd));
+                }
+                response.AppendLine();
+            }
+
+            if (showSettings)
+            {
+                response.AppendLine(LocalizationService.GetString("settings_commands"));
+                foreach (var cmd in allCommands.Where(c => _manager._settingsCommands.Contains(c.Name)))
+                {
+                    response.AppendLine(FormatCommandLine(cmd));
+                }
+                response.AppendLine();
+            }
+
+            if (showVerified)
+            {
+                var verifiedCommands = allCommands.Where(c =>
+                    !_manager._builtInCommands.Contains(c.Name) &&
+                    VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx")).ToList();
+
+                if (verifiedCommands.Any())
+                {
+                    response.AppendLine(LocalizationService.GetString("verified_commands"));
+                    foreach (var cmd in verifiedCommands)
+                    {
+                        response.AppendLine(FormatCommandLine(cmd) + " ✅");
+                    }
+                    response.AppendLine();
+                }
+            }
+
+            if (showOther)
+            {
+                var otherCommands = allCommands.Where(c =>
+                    !_manager._builtInCommands.Contains(c.Name) &&
+                    !VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx")).ToList();
+
+                if (otherCommands.Any())
+                {
+                    response.AppendLine(LocalizationService.GetString("external_commands"));
+                    foreach (var cmd in otherCommands)
+                    {
+                        response.AppendLine(FormatCommandLine(cmd));
+                    }
+                    response.AppendLine();
+                }
+            }
+
+            response.Append(LocalizationService.GetString("command_help"));
+            OutputService.WriteResponse(response.ToString());
+        }
+
+        private async Task ShowFilteredCommandsAsTable(bool showSystem, bool showSettings, bool showVerified, bool showOther)
+        {
+            await VerifiedExtensionsService.EnsureHashesLoadedAsync();
+            var allCommands = _manager.GetAllCommands()
+                .GroupBy(c => c.Name)
+                .Select(g => g.First())
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            if (showSystem)
+            {
+                var system = allCommands.Where(c => _manager._systemCommands.Contains(c.Name)).ToList();
+                if (system.Any())
+                {
+                    OutputService.WriteTableColumnsHighlight(
+                        LocalizationService.GetString("system_commands"),
+                        new List<IEnumerable<string>> {
+                    system.Select(c => c.Name),
+                    system.Select(c => c.Description),
+                    system.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-")
+                        },
+                        new List<string> {
+                    LocalizationService.GetString("command"),
+                    LocalizationService.GetString("description"),
+                    LocalizationService.GetString("aliases")
+                        }
+                    );
+                }
+            }
+
+            if (showSettings)
+            {
+                var settings = allCommands.Where(c => _manager._settingsCommands.Contains(c.Name)).ToList();
+                if (settings.Any())
+                {
+                    OutputService.WriteTableColumnsHighlight(
+                        LocalizationService.GetString("settings_commands"),
+                        new List<IEnumerable<string>> {
+                    settings.Select(c => c.Name),
+                    settings.Select(c => c.Description),
+                    settings.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-")
+                        },
+                        new List<string> {
+                    LocalizationService.GetString("command"),
+                    LocalizationService.GetString("description"),
+                    LocalizationService.GetString("aliases")
+                        }
+                    );
+                }
+            }
+
+            if (showVerified)
+            {
+                var verified = allCommands.Where(c =>
+                    !_manager._builtInCommands.Contains(c.Name) &&
+                    VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx")).ToList();
+
+                if (verified.Any())
+                {
+                    OutputService.WriteTableColumnsHighlight(
+                        LocalizationService.GetString("verified_commands"),
+                        new List<IEnumerable<string>> {
+                    verified.Select(c => c.Name),
+                    verified.Select(c => c.Description),
+                    verified.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-"),
+                    verified.Select(c => "✅")
+                        },
+                        new List<string> {
+                    LocalizationService.GetString("command"),
+                    LocalizationService.GetString("description"),
+                    LocalizationService.GetString("aliases"),
+                    LocalizationService.GetString("verification")
+                        }
+                    );
+                }
+            }
+
+            if (showOther)
+            {
+                var other = allCommands.Where(c =>
+                    !_manager._builtInCommands.Contains(c.Name) &&
+                    !VerifiedExtensionsService.IsExtensionVerified($"{c.Name.ToLower()}.csx")).ToList();
+
+                if (other.Any())
+                {
+                    OutputService.WriteTableColumnsHighlight(
+                        LocalizationService.GetString("external_commands"),
+                        new List<IEnumerable<string>> {
+                    other.Select(c => c.Name),
+                    other.Select(c => c.Description),
+                    other.Select(c => c.Aliases.Any() ? string.Join(", ", c.Aliases) : "-")
+                        },
+                        new List<string> {
+                    LocalizationService.GetString("command"),
+                    LocalizationService.GetString("description"),
+                    LocalizationService.GetString("aliases")
+                        }
+                    );
+                }
             }
         }
     }
