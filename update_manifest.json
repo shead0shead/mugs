@@ -1,22 +1,22 @@
 {
-    "latestVersion": "1.3.2",
+    "latestVersion": "1.3.3",
     "critical": false,
-    "changelog": "• Add prompt style setting and command\n• Add tabular output for color command\n• Add command history limit setting",
+    "changelog": "• Add config command\n• Add filtered output to help command",
     "assets": [
       {
         "fileName": "Mugs.exe",
-        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.3.1/Mugs.exe",
-        "sha256": "b87b9d9943ddae900b158bb1ed2685d980bab10de8463e3b63d7fa44184134fa"
+        "downloadUrl": "https://github.com/shead0shead/mugs/releases/download/v1.3.3/Mugs.exe",
+        "sha256": "24b1441da270de4cb6bb019d0573f31370b0116900cad822270918d7090d037f"
       },
       {
         "fileName": "en.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/en.json",
-        "sha256": "6aecf960d5a22e745de83db338eb99cfa8e0edba8c03c5364744556381e780fe"
+        "sha256": "dd6e8693e1708f02b8c1c11bddd6cf7b33b91be80b969684711d6e418492d7ee"
       },
       {
         "fileName": "ru.json",
         "downloadUrl": "https://github.com/shead0shead/mugs/blob/main/languages/ru.json",
-        "sha256": "2904811f1d1b1258aa19b8d6eb5190fe872778fbdda532f85b1206e10bf248af"
+        "sha256": "4fdf018151a9eb42633235114baa18b628d3d755904886946d754f86dff0aebf"
       }
     ]
   }
