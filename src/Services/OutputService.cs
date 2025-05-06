@@ -56,24 +56,27 @@ namespace Mugs.Services
         {
             var message = LocalizationService.GetString(messageKey, args);
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            int maxLineLength = Console.WindowWidth - 2;
 
-            switch (logPrefix)
+            var wrappedLines = new List<string>();
+            foreach (var line in lines)
             {
-                case "Error":
-                    LoggerService.LogError($"Error: {message}");
-                    break;
-                case "Warning":
-                    LoggerService.LogWarning($"Warning: {message}");
-                    break;
-                case "Debug":
-                    LoggerService.LogDebug($"Debug: {message}");
-                    break;
-                default:
-                    LoggerService.LogInfo($"{logPrefix}: {message}");
-                    break;
+                if (line.Length <= maxLineLength)
+                {
+                    wrappedLines.Add(line);
+                    continue;
+                }
+
+                int pos = 0;
+                while (pos < line.Length)
+                {
+                    int length = Math.Min(maxLineLength, line.Length - pos);
+                    wrappedLines.Add(line.Substring(pos, length));
+                    pos += length;
+                }
             }
 
-            foreach (var line in lines)
+            foreach (var line in wrappedLines)
             {
                 Console.ForegroundColor = borderColor;
                 Console.Write($"{BorderChar} ");
@@ -85,7 +88,7 @@ namespace Mugs.Services
             Console.WriteLine();
         }
 
-        public static void WriteBoxed(string messageKey, ConsoleColor borderColor, string logPrefix, params object[] args)
+        private static void WriteBoxed(string messageKey, ConsoleColor borderColor, string logPrefix, params object[] args)
         {
             const char TopLeft = '╭';
             const char TopRight = '╮';
@@ -97,11 +100,31 @@ namespace Mugs.Services
 
             var message = LocalizationService.GetString(messageKey, args);
             var lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            int maxLength = lines.Max(line => line.Length);
-            int boxWidth;
 
-            boxWidth = Console.WindowWidth;
-            // boxWidth = Math.Max(maxLength + 4, 10);
+            int maxLength = lines.Max(line => line.Length);
+            int boxWidth = Console.WindowWidth;
+
+            //int boxWidth = Math.Min(
+            //    Math.Max(maxLength + 4, 10),
+            //    Console.WindowWidth - 2);
+
+            var wrappedLines = new List<string>();
+            foreach (var line in lines)
+            {
+                if (line.Length <= boxWidth - 4)
+                {
+                    wrappedLines.Add(line);
+                    continue;
+                }
+
+                int pos = 0;
+                while (pos < line.Length)
+                {
+                    int length = Math.Min(boxWidth - 4, line.Length - pos);
+                    wrappedLines.Add(line.Substring(pos, length));
+                    pos += length;
+                }
+            }
 
             switch (logPrefix)
             {
@@ -123,7 +146,9 @@ namespace Mugs.Services
             Console.Write(TopLeft);
             if (AppSettings.EnableBoxedOutputTitle)
             {
-                Console.Write(Horizontal + $" {logPrefix} " + new string(Horizontal, boxWidth - 5 - logPrefix.Length));
+                string title = $"{Horizontal} {logPrefix} ";
+                Console.Write(title);
+                Console.Write(new string(Horizontal, boxWidth - title.Length - 1));
             }
             else
             {
@@ -132,7 +157,7 @@ namespace Mugs.Services
             Console.WriteLine(TopRight);
             Console.ResetColor();
 
-            foreach (var line in lines)
+            foreach (var line in wrappedLines)
             {
                 Console.ForegroundColor = borderColor;
                 Console.Write(Vertical);
@@ -140,8 +165,8 @@ namespace Mugs.Services
 
                 Console.Write(Space);
                 if (logPrefix == "Error") Console.ForegroundColor = borderColor;
-                Console.Write(line.PadRight(boxWidth - 4));
-                Console.Write(Space);
+                Console.Write(line);
+                Console.Write(new string(Space, boxWidth - 3 - line.Length));
 
                 Console.ForegroundColor = borderColor;
                 Console.WriteLine(Vertical);
