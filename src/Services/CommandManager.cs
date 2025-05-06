@@ -306,7 +306,8 @@ namespace Mugs.Services
                 if (line.TrimStart().StartsWith("using ") && line.Contains(";"))
                 {
                     var usingDirective = line.Trim();
-                    existingUsings.Add(usingDirective.Substring(6, usingDirective.Length - 7).Trim());
+                    var namespaceName = usingDirective.Substring(6, usingDirective.Length - 7).Trim();
+                    existingUsings.Add(namespaceName);
                 }
             }
 
@@ -345,7 +346,8 @@ namespace Mugs.Services
                         }
                     }
                 }
-                else if (!line.TrimStart().StartsWith("using ") || !defaultUsings.Contains(line.Trim().Substring(6, line.Trim().Length - 7).Trim()))
+                else if (!(line.TrimStart().StartsWith("using ") && line.Contains(";") &&
+                         defaultUsings.Contains(line.Trim().Substring(6, line.Trim().Length - 7).Trim())))
                 {
                     result.AppendLine(line);
                 }
